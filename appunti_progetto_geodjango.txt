@@ -1,0 +1,8 @@
+vs code
+
+direttamente nel file
+html -> html:5
+compila automaticamente con il codice di html 5
+
+live server come estensione di vs code
+poi clickdestro sul file per aprirlo nel browser

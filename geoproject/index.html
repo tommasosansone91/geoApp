@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>leaflet geoproject</title>
+
+    <style>
+        #map{
+            width: 100%;
+            height: 700px;
+        }
+    </style>
+
+    <!-- Include Leaflet CSS file in the head section of your document: -->
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+     integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+     crossorigin=""/>
+
+
+
+</head>
+
+<body>
+    <!--  this is where i want my map to be -->
+    <div style="height: 500px; width: 90%;" id="map"></div>
+    <!-- set this style onòy to fit the screen where i am developing -->
+
+    <button onclick=fullScreenview()>View in full screen</button>
+    <!-- this is a user defined function -->
+
+    <div class="coordinate">void</div>
+
+    <button class="print-map">Print map</button>
+
+</body>
+
+</html>
+
+<!-- Include Leaflet JavaScript file after Leaflet’s CSS: -->
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<!-- <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script> -->
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<!-- load jquery. I put this after leaflet -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+
+<!-- import a library leaflet.browser.print from locl folder lib placed at same path f this script -->
+<script src="./lib/leaflet.browser.print.min.js"></script>
+
+<script>
+    // initializig the class map
+    var map = L.map('map').setView([44.8683931,9.2651729], 15);
+    map.zoomControl.setPosition('topright');
+
+        // addig osm layer
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    L.marker([44.8683931,9.2651729]).addTo(map)
+        .bindPopup('lable on my pointer.')
+        .openPopup();
+
+    // add map scale
+    L.control.scale().addTo(map);
+
+    // full sreeen function
+    var mapId = document.getElementById('map');
+
+    function fullScreenview() {
+        mapId.requestFullscreen();
+    }
+
+    // display the coordinates of the point pf hte map where the mouse is
+    // i need jquery for this
+
+    // when the mouse is over the map - when the map fires the event mousemove
+    map.on('mousemove', function(e) {
+
+
+        // this is a nice way to chek if the info I want is got correctly
+        console.log(e);
+        // console.log(e.latlng.lat);
+        // console.log(e.latlng.lng);
+
+        // replace the content of the element having class coordinate with the html
+        $('.coordinate').html(`Lat: ${e.latlng.lat} Long: ${e.latlng.lng}`);
+    })
+
+    // print map
+    $('.print-map').click(function(){
+        window.print()
+    })
+
+
+
+</script>
+
