@@ -18,6 +18,8 @@
      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
      crossorigin=""/>
 
+     <!-- this is the css for a js tool that allows to take measures on the map. the js is importes later, after html closure tag -->
+     <link rel="stylesheet"href="./lib/leaflet-measure.css"/>
 
 
 </head>
@@ -47,12 +49,23 @@
 <!-- load jquery. I put this after leaflet -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
 
-<!-- import a library leaflet.browser.print from locl folder lib placed at same path f this script -->
+<!-- import a library leaflet.browser.print from local folder lib placed at same path f this script -->
 <script src="./lib/leaflet.browser.print.min.js"></script>
+
+<!-- import a library measure-leaflet from local folder lib placed at same path f this script -->
+<script src="./lib/leaflet-measure.js"></script>
+<!-- this library also requires a css lib , because styles are defined in there. it has to be loaded in head -->
+
 
 <script>
     // initializig the class map
+    // var map = L.map('map', {
+    //     measureControl: true, // this is necessary to allow the measure lib to work
+    // }    ).setView([44.8683931,9.2651729], 15);
+    // otherwise,
     var map = L.map('map').setView([44.8683931,9.2651729], 15);
+    // would be enough
+
     map.zoomControl.setPosition('topright');
 
         // addig osm layer
@@ -88,13 +101,24 @@
 
         // replace the content of the element having class coordinate with the html
         $('.coordinate').html(`Lat: ${e.latlng.lat} Long: ${e.latlng.lng}`);
-    })
+    });
 
     // print map
     $('.print-map').click(function(){
-        window.print()
-    })
+        window.print();
+    });
 
+    // uses this library got from remote
+    // ./lib/leaflet.browser.print.min.js
+    //  to load a print wdget on the map
+    L.control.browserPrint().addTo(map);
+
+    // this loads on the map a widget to measure distances . leaflet-measure
+    L.control.measure({
+        primaryLengthUnit: 'meters',
+        primaryAreaUnit:'sqmeters',
+        secondaryLengthUnit: 'kilometers',
+    }).addTo(map);
 
 
 </script>
