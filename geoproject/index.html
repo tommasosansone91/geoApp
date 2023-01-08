@@ -19,8 +19,11 @@
      crossorigin=""/>
 
      <!-- this is the css for a js tool that allows to take measures on the map. the js is importes later, after html closure tag -->
-     <link rel="stylesheet"href="./lib/leaflet-measure.css"/>
+     <link rel="stylesheet" href="./lib/leaflet-measure.css"/>
 
+     <!-- load tool leaflet markers cluster styyles -->
+     <link rel="stylesheet" href="./lib/MarkerCluster.css"/>
+     <link rel="stylesheet" href="./lib/MarkerCluster.Default.css"/>
 
 </head>
 
@@ -56,6 +59,12 @@
 <script src="./lib/leaflet-measure.js"></script>
 <!-- this library also requires a css lib , because styles are defined in there. it has to be loaded in head -->
 
+<!-- load the json containing the data ò they must still be displayed on the map-->
+<script src="./data/test_data.js"></script>
+
+<!-- load tool leaflet markers cluster -->
+<script src="./lib/leaflet.markercluster.js"></script>
+
 
 <script>
     // initializig the class map
@@ -63,18 +72,29 @@
     //     measureControl: true, // this is necessary to allow the measure lib to work
     // }    ).setView([44.8683931,9.2651729], 15);
     // otherwise,
-    var map = L.map('map').setView([44.8683931,9.2651729], 15);
+    var map = L.map('map').setView([44.8683931,9.2651729], 14);
     // would be enough
 
     map.zoomControl.setPosition('topright');
 
-        // addig osm layer
+        // adding osm layer
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    L.marker([44.8683931,9.2651729]).addTo(map)
-        .bindPopup('lable on my pointer.')
+    // main marker
+    //  define its style - https://stackoverflow.com/questions/23567203/leaflet-changing-marker-color
+    var greenIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+        });
+
+    L.marker([44.8683931,9.2651729], {icon: greenIcon}).addTo(map)
+        .bindPopup('Zavattarello')  // label on my pointer
         .openPopup();
 
     // add map scale
@@ -119,6 +139,30 @@
         primaryAreaUnit:'sqmeters',
         secondaryLengthUnit: 'kilometers',
     }).addTo(map);
+
+    // load geojson data on the map
+    // L.geoJSON(map_data_1).addTo(map);
+    // deleted to be replaced with markercluster
+
+    // now with marker cluster
+    var marker = L.markerClusterGroup(); // initialize var marker from class markerclustergroup
+
+    // var map_data_v1 = L.geoJSON(map_data_1);
+
+    var map_data_v1 = L.geoJSON(map_data_1, {
+        onEachFeature: function(feature, layer) {
+            // layer.bindPopup('test label')
+            layer.bindPopup(feature.properties.name)
+        }
+    });
+
+    map_data_v1.addTo(marker);
+
+    marker.addTo(map);
+
+    
+
+
 
 
 </script>
