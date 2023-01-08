@@ -36,12 +36,20 @@
     <div style="height: 500px; width: 90%;" id="map"></div>
     <!-- set this style onòy to fit the screen where i am developing -->
 
+    <!-- buttons section -->
+
+    <!-- full screen -->
     <button onclick=fullScreenview()>View in full screen</button>
     <!-- this is a user defined function -->
 
+    <!-- coordinates box -->
     <div class="coordinate">void</div>
 
+    <!-- print the map -->
     <button class="print-map">Print map</button>
+
+    <!-- zoom to -->
+    <button class="zoom-to-layer">Reset view</button>
 
 </body>
 
@@ -199,6 +207,8 @@
     // leaflet search add
     L.Control.geocoder().addTo(map)
 
+
+
     // leaflet layer contorl
     var baseMaps = {
         'OSM': osm_basemap,
@@ -212,6 +222,11 @@
     }
 
     L.control.layers(baseMaps, geodataLayers).addTo(map)
+
+    // leaflet zoom
+    $('.zoom-to-layer').click(function(){
+        map.setView([44.8683931,9.2651729], 14)
+    })
     
 
 </script>
