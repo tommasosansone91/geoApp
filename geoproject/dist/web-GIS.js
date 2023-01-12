@@ -2,8 +2,18 @@
 var mapId = document.getElementById('map');
 
 
+// function fullScreenview() {
+//     mapId.requestFullscreen();
+// }
+
 function fullScreenview() {
-    mapId.requestFullscreen();
+    
+    if(document.fullscreenElement){
+        document.exitFullscreen()
+    }else{
+        mapId.requestFullscreen();
+    }
+    
 }
 
 
@@ -21,16 +31,18 @@ map.on('mousemove', function(e) {
 
 
 // print map
-$('.print-map').click(function(){
-    window.print();
-});
+// $('.print-map').click(function(){
+//     window.print();
+// });
 
 
 // uses this library got from remote
 // ./lib/leaflet.browser.print.min.js
 //  to load a print wdget on the map
-L.control.browserPrint().addTo(map);
+L.control.browserPrint({position: 'topright'}).addTo(map);
 
+// leaflet search add
+L.Control.geocoder().addTo(map)
 
 // this loads on the map a widget to measure distances . leaflet-measure
 L.control.measure({
@@ -38,11 +50,6 @@ L.control.measure({
     primaryAreaUnit:'sqmeters',
     secondaryLengthUnit: 'kilometers',
 }).addTo(map);
-
-
-// leaflet search add
-L.Control.geocoder().addTo(map)
-
 
 // leaflet zoom
 $('.zoom-to-layer').click(function(){
