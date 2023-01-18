@@ -6,3 +6,146 @@ compila automaticamente con il codice di html 5
 
 live server come estensione di vs code
 poi clickdestro sul file per aprirlo nel browser
+
+-------------------------------
+
+installazione postgres e pgadmin4
+
+seguendo
+https://computingforgeeks.com/how-to-install-pgadmin-4-on-ubuntu/
+
+alla fine ho aggiunto un nuovo server
+
+http://localhost/pgadmin4/login?next=%2Fpgadmin4%2F
+
+
+name
+postgres-local
+
+username
+postgres
+
+pw
+postgres
+
+hostanme / address
+127.0.0.1
+
+port
+5432
+
+server group
+Servers
+
+
+inoltre ho registrato il mio utente come
+
+tommaso.sansone91@virgilio.it
+M**********91
+
+----------------------------------
+
+il server di default è postgres
+
+lo schema di default è public
+
+voglio creare la estensione per postgs
+
+tool > query tool
+
+CREATE EXTENSION postgis
+
+refresh schema and check table
+
+spatial_ref_sys
+
+select * from spatial_ref_sys
+
+create table demo(
+	id serial primary key,
+	name text,
+	geometric_field geometry
+);
+
+insert into demo(name, geometric_field)
+values('Point', ST_GeomFromText('Point(1 1)'));
+
+-- geometric query - can investigate it with geometry viewer
+select * from public.demo;
+
+------------------------------------------------------------
+
+installazione geodjango
+
+crea virtualenv in nuova cartella django
+
+virtualenv venv
+
+source venv/bin/activate
+
+python3 -m pip install --upgrade pip
+
+sudo apt install libgdal-dev
+pip install GDAL==$(gdal-config --version | awk -F'[.]' '{print $1"."$2}')
+
+pip install django==3.1.14
+
+django-admin startproject geoApp
+
+/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango/django$ cd geoApp/
+(venv) tommaso@tommaso-VirtualBox02:~/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango/django/geoApp$ python manage.py runserver
+
+ora nota che djagno è esposto sulla porta 8000
+mentre leaflet sulla 5500
+mentre pgadmin sulla 80 (non essendoci una porta il default è 80)...er l indirizzo è /pgadmin4/browser/
+http://localhost/pgadmin4/login?next=%2Fpgadmin4%2F
+
+changing setitng to enable settign geodjango
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        # creo il db dalla interfaccia di pgadmin - db: geoapp
+        'NAME': 'geoapp',
+        'USER': 'postgres',
+        'PASSWORD': 'password',  # ???
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+
+nota che non ho definito la pw quando ho creato il db geoapp da pgadminho dato solo il nome.
+e mi ha messo automatico owner postgres
+nota la differenza tra configurazioni di server e di DATABASES
+
+il database ha solo il nome
+
+il server ha 
+nome
+username
+hostname/address
+pw
+porta
+
+
+python manage.py startapp shp
+
+----------------------
+
+installare geoserver
+
+https://docs.geoserver.org/stable/en/user/installation/linux.html
+
+tommaso@tommaso-VirtualBox02:~$ sudo mkdir -p /usr/share/geoserver
+[sudo] password for tommaso: 
+tommaso@tommaso-VirtualBox02:~$ echo "export GEOSERVER_HOME=/usr/share/geoserver" >> ~/.profile
+. ~/.profile
+
+tommaso@tommaso-VirtualBox02:~$ sudo chown -R tommaso /usr/share/geoserver/
+
+estraggo lo zip
+
+cd geoserver/bin
+sh startup.sh   # lo fa partire
+
+http://localhost:8080/geoserver
