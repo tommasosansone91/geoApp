@@ -1,0 +1,20 @@
+seguendo
+
+
+https://pypi.org/project/geoserver-rest/
+
+lezione 23
+
+admin
+geoserver
+
+
+
+# attivare geoserver
+cd /usr/share/geoserver/bin/
+sh startup.sh # lo fa partire
+
+# aprire geoserver
+xdg-open localhost:8080/geoserver/
+
+sh startup.sh & xdg-open localhost:8080/geoserver/

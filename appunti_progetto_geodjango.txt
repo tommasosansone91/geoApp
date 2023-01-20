@@ -100,6 +100,7 @@ mentre leaflet sulla 5500
 mentre pgadmin sulla 80 (non essendoci una porta il default è 80)...er l indirizzo è /pgadmin4/browser/
 http://localhost/pgadmin4/login?next=%2Fpgadmin4%2F
 
+
 changing setitng to enable settign geodjango
 
 DATABASES = {
@@ -149,3 +150,32 @@ cd geoserver/bin
 sh startup.sh   # lo fa partire
 
 http://localhost:8080/geoserver
+
+admin
+geoserver (default)
+
+
+
+-------------------- lesson 21 -------
+
+nuova dire geoserver-rest
+
+serve python 3
+
+tommaso@tommaso-VirtualBox02:~/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango/geoserver-rest$ python3 -m virtualenv venv
+
+installo le lib in un nuovo venv
+
+non mi serve pipwin perche uso ubuntu
+
+installo gdal facendo direttamnete
+
+pip install geoserver-rest==2.3.4
+
+pip install pycurl
+pip install gdal
+
+
+
+
+https://pypi.org/project/geoserver-rest/
