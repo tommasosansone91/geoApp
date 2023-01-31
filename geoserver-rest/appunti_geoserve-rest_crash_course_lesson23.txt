@@ -8,6 +8,10 @@ lezione 23
 admin
 geoserver
 
+# creato venv
+
+source venv/bin/activate
+
 
 
 # attivare geoserver
@@ -17,4 +21,72 @@ sh startup.sh # lo fa partire
 # aprire geoserver
 xdg-open localhost:8080/geoserver/
 
-sh startup.sh & xdg-open localhost:8080/geoserver/
+# cd /usr/share/geoserver/bin/ && sh startup.sh && xdg-open localhost:8080/geoserver/
+
+
+per lanciare i comandi prima attiva il venv
+
+devi avere nel browser la finestra aperta su cui runna geoserver
+
+loggarsi su geoserver  localhost:8080/geoserver/ con credenziali salvate
+
+admin
+geoserver (default)
+
+# per eseguire i comandi di questo script
+python geoserver-rest.py
+
+
+---------------------------------
+
+importare uno shapefile tramite qgis
+
+installare qgis da temrinale
+https://installati.one/install-qgis-ubuntu-22-04/
+
+connettere il db postgres che ho creato prima
+
+
+
+usando qgis
+
+riquadro sinistra sopra "browser"
+right click su postgres, new connection
+inseirre le credenziali del db e suo server
+
+name: postgres
+database: postgres
+host: localhost
+porta: quella base dipostgres
+OK
+inserisci user e password:
+user: postgres
+pw: password
+test connection
+OK
+
+vedo che lo agigunge
+
+poi sempre da qgis
+menu in alto principale
+
+database > db manager
+da postgres seleziona il db connesso prima
+doppio click sul db
+poi il tasto in alto import
+
+seleziono import di
+.../geoserver-rest/data/vector/jamoat-db.shp
+
+devo selezionare il srid
+tramite qgis apro quello shape e vedo che il suo id è
+32642 - -ce l ho gia
+seleziono schema: public
+import only selected features
+geom
+srid in e out
+
+lo viauslaizzo on pgadmin4 che non ha bisogno di essere startato
+http://localhost/pgadmin4/login?next=%2Fpgadmin4%2F
+
+

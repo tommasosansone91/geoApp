@@ -1,1 +1,9 @@
 la cartella col nome lungo è il download del source coede del corso
+
+django: contiene venv e progetto di backend fatto in django
+
+jnotebooks: continene jbooks per processare i dati json eo dati dal corso in dati preferiti (Zavattarello)
+
+geoproject: è il forntend basato su leaflet e jquery, javascript
+
+geoserver-rest: crash course di geoserver

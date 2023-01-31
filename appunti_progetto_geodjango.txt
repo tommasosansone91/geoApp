@@ -103,6 +103,8 @@ http://localhost/pgadmin4/login?next=%2Fpgadmin4%2F
 
 changing setitng to enable settign geodjango
 
+nb. queste saranno le credenziali del mio db postgres
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
@@ -150,6 +152,9 @@ cd geoserver/bin
 sh startup.sh   # lo fa partire
 
 http://localhost:8080/geoserver
+
+
+credenziali di geoserver
 
 admin
 geoserver (default)
