@@ -15,6 +15,7 @@ locate jdk-18 | xargs rm -f
 
 +
 
+# file di default di geoserver ?
 sudo rm /etc/default/geoserver
 
 
@@ -27,6 +28,18 @@ cd /usr/share/
 sudo rm -r geoserver/
 
 
+rimuovi il venv
+-------------------
+
+cd /corsi_udemy/web-mapping-and-webgis-geodjango/geoserver-rest
+
+source venv/bin/activate
+
+pip freeze > requirements.txt
+
+deactivate
+
+rm -r venv
 
 
 
@@ -34,6 +47,19 @@ reinstall java 11 (doc of geoserver (not hte rest one!) says only java 17 or 11 
 ----------------------------------------------------------------------------------------------
 sudo apt update
 sudo apt install openjdk-11-jdk
+
+
+rifai il venv con i suoi componenti
+--------------------------------------
+
+cd /corsi_udemy/web-mapping-and-webgis-geodjango/geoserver-rest
+
+virtualenv venv
+
+source venv/bin/activate
+
+pip install -r requirements.txt
+
 
 
 
@@ -45,6 +71,8 @@ downloaded
 and saved into new path
 cd usr/share/
 sudo mkdir geoserver
+
+cp ..../geoserver-2.22.0-bin.zip  /usr/share/geoserver/
 /usr/share/geoserver/geoserver-2.22.0-bin.zip
 
 unzip via UI
@@ -59,3 +87,5 @@ sudo chown -R tommaso /usr/share/geoserver/
 cd /usr/share/geoserver/bin/ && sh startup.sh 
 
 In a web browser, navigate to http://localhost:8080/geoserver
+
+
