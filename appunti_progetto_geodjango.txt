@@ -133,6 +133,8 @@ porta
 
 python manage.py startapp shp
 
+poi aggiungila in fondo alle installed_apps di settigns.py
+
 ----------------------
 
 installare geoserver
@@ -148,7 +150,7 @@ tommaso@tommaso-VirtualBox02:~$ sudo chown -R tommaso /usr/share/geoserver/
 
 estraggo lo zip
 
-cd geoserver/bin
+cd /usr/share/geoserver/bin
 sh startup.sh   # lo fa partire
 
 http://localhost:8080/geoserver
@@ -223,3 +225,53 @@ Username (leave blank to use 'tommaso'): admin
 Email address: admin@gmail.com
 Password: password
 Password (again): 
+
+
+muovo i file dalla cartella del frontend verso una nuova cartella static dentro geoApp del progetto geoApp
+questo perche django usa il medodo static per gestire css e javascritp.
+quindi devo coambiare come sono inkati in index html
+
+index html invece l ho messo in una cattella templates che è allo stesso livello ddelle app shp e geoApp
+
+quidi devo agigungere il django tag {% load static %} al top della pagina che linka i contenuti
+
+poi python manage. py collectstatic
+questo comando copia tutti i file messi dentro la cartell
+
+a static in cui ci sono stile, js, ecc
+dentro la staticfiles dir definita dal sistema settings di geoApp.
+
+STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'geoApp/static') ]
+
+144 static files copied to '/home/tommaso/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango/django/geoApp/static'.
+
+ora tutti  i link a una risorsa dentro static opossono essere linkati usando il tag static di django
+
+
+--------------- lezione 30 ---------------------
+
+pip install shapely
+geopandas
+pandas
+numpy
+rasterio
+geoserver-rest=2.3.4
+shapely
+ pip install SQLAlchemy
+ pycurl
+ 
+ ------ lez 31 --------
+
+creo i modelli dentro shp
+
+makemigrations mi crea il file .py dentro <global_app>/<model_name>/migrations/
+
+migrate esegue quel file e esegue le update sul db
+
+dopo che ho lanciato migrate posso accedere a pgadmin e vedere che le tabelle del db sono state aggiornate
+
+
+
+
+
+
