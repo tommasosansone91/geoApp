@@ -16,8 +16,10 @@ https://computingforgeeks.com/how-to-install-pgadmin-4-on-ubuntu/
 
 alla fine ho aggiunto un nuovo server
 
+collegarsi a postgres da browser
 http://localhost/pgadmin4/login?next=%2Fpgadmin4%2F
 
+il servizio postgres viene startato naturalmente a start della machcina
 
 name
 postgres-local
@@ -271,7 +273,11 @@ migrate esegue quel file e esegue le update sul db
 dopo che ho lanciato migrate posso accedere a pgadmin e vedere che le tabelle del db sono state aggiornate
 
 
+---------- lez 36 ----------
 
+in postgres
+
+create schema data;
 
 
 
