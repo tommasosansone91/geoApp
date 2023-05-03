@@ -14,6 +14,19 @@ installazione postgres e pgadmin4
 seguendo
 https://computingforgeeks.com/how-to-install-pgadmin-4-on-ubuntu/
 
+"""
+  110  curl  -fsSL https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/pgadmin.gpg
+  111  sudo sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list'
+  112  cat /etc/apt/sources.list.d/pgadmin4.list
+  113  sudo apt update
+  114  sudo apt install pgadmin4
+  115  systemctl status apache2
+  116  sudo /usr/pgadmin4/bin/setup-web.sh
+  117  sudo ufw allow http
+  118  sudo ufw allow https
+
+"""
+
 alla fine ho aggiunto un nuovo server
 
 collegarsi a postgres da browser
@@ -44,6 +57,8 @@ inoltre ho registrato il mio utente come
 
 tommaso.sansone91@virgilio.it
 M**********91
+
+http://localhost/pgadmin4/login?next=%2Fpgadmin4%2F
 
 ----------------------------------
 
