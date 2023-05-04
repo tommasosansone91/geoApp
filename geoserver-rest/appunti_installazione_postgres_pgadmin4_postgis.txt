@@ -1,30 +1,48 @@
 
 
-apt update
+sudo apt update && sudo apt -y full-upgrade
+[ -f /var/run/reboot-required ] && sudo reboot -f
 
-apt install postgresql postgresql-contrib -y
+sudo reboot
 
-systemctl start postgresql.service
+sudo apt update
+sudo apt install curl gpg gnupg2 software-properties-common apt-transport-https lsb-release ca-certificates
 
-systemctl status postgresql.service
+curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
 
-systemctl enable postgresql.service
+echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
+
+
+sudo apt update
+
+sudo apt install postgresql-13 postgresql-client-13
+
+systemctl status postgresql@13-main.service
+
+sudo su - postgres
+
+----------------
 
 
 sudo -i -u postgres
 
 psql
 
+\conninfo
+
+ALTER USER postgres WITH PASSWORD 'postgres';
+
 create database "postgres-local";
 
 grant all privileges on database "postgres-local" to postgres;
 
-ALTER USER postgres WITH PASSWORD 'postgres';
+
 
 
 ctrl+D
 ctrl+D
 
+------------------------
 
 curl  -fsSL https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/pgadmin.gpg
 
