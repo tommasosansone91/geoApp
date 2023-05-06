@@ -19,7 +19,11 @@ sudo apt install postgresql-13 postgresql-client-13
 
 systemctl status postgresql@13-main.service
 
-sudo su - postgres
+# check the port where postgres is rnning
+
+sudo apt install net-tools
+
+sudo netstat -lntp | grep postgres
 
 ----------------
 
@@ -32,11 +36,11 @@ psql
 
 ALTER USER postgres WITH PASSWORD 'postgres';
 
-create database "postgres-local";
+# not really needed
 
-grant all privileges on database "postgres-local" to postgres;
+# create database "postgres-local";
 
-
+# grant all privileges on database "postgres-local" to postgres;
 
 
 ctrl+D
@@ -65,6 +69,7 @@ sudo ufw allow https
 
 
 ---------------
+
 
 
 
