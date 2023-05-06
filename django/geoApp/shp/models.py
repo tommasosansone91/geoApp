@@ -93,7 +93,13 @@ def publish_data(sender, instance, created, **kwargs):
     gdf.to_sql(file_name, engine, 'public', if_exists='replace', index=False, dtype={'geom': Geometry('Geometry', srid=epsg)})
     # post gdf to the postgresql
 
+    """
+    Publish shp to geoserver using geoserver rest
+    """
 
+    geo.create_featurestore(store_name='geoApp', workspqce='demo', db='postgres', host='localhost', pg_user='postgres', pg_password='password')
+
+    geo.publish_featurestore(workspace='demo', store_name='postgis', pg_table='jamoat-db')
 
 
 
