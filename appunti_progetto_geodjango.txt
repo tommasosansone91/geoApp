@@ -122,6 +122,13 @@ port
 server group
 Servers
 
+nota: questo server viene creato dall'utente postgres, per il quale devo settare la password in postgres
+
+sudo -i -u postgres
+psql
+
+ALTER USER postgres WITH PASSWORD 'postgres';
+
 
 inoltre ho registrato il mio utente come
 
