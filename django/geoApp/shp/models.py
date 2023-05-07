@@ -20,7 +20,7 @@ from geoApp.settings import DATABASES
 from geoalchemy2 import Geometry, WKTElement
 from geo.Geoserver import Geoserver
 
-from geo.Postgres import Db
+from geo.Geoserver.Postgres import Db
 # this one import from venv/lib/site-package/geo/Postgres.py where a Db class is defined
 
 # import db credentials, 
@@ -53,20 +53,45 @@ conn_str = 'postgresql://{user}:{password}@{host}:{port}/{dbname}'.format(
 
 # the workspace is created once by user in geoserver UI
 wks_name='geoapp'
+
+# store_name
 ste_name='geoApp'
 
-gs_params = {
+# schema name
+schema_name = 'data'
+
+# layer name
+layer_name = wks_name
+
+
+gsrv_params = {
     'user': 'admin',
     'password': 'geoserver'
 }
 
+# initializations
+#------------------
+
 # initialize the library
-geo = Geoserver('http://127.0.0.1:8080/geoserver', username=gs_params['user'], password=gs_params['password'])
+geo = Geoserver(
+            'http://127.0.0.1:8080/geoserver', 
+            username=gsrv_params['user'], 
+            password=gsrv_params['password']
+            )
 
 
+# initialize the Db class
+db = Db(
+    dbname=db_params['dbname'], 
+    user=db_params['user'], 
+    password=db_params['password'], 
+    host=db_params['host'], 
+    port=db_params['port']
+    )
 
 
-
+# class and function definintion
+#---------------------------------
 
 # the shapefile model
 
@@ -87,6 +112,9 @@ def publish_data(sender, instance, created, **kwargs):
     file_format = os.path.basename(shp_file).split('.')[-1]
     file_name = os.path.basename(shp_file).split('.')[0]
     file_path = os.path.dirname(shp_file)
+
+    inst_name = instance.name
+    # it's going to be the same name we have in admin panel
 
 
     # it's the same password that we have in settings
@@ -133,17 +161,36 @@ def publish_data(sender, instance, created, **kwargs):
     gdf.drop('geometry', 1, inplace=True)  # drop the geometry column since we already bckup this column with geom
     # In a future version of pandas all arguments of DataFrame.drop except for the argument 'labels' will be keyword-only.
 
-    gdf.to_sql(file_name, engine, 'public', if_exists='replace', index=False, dtype={'geom': Geometry('Geometry', srid=epsg)})
     # post gdf to the postgresql
+    # gdf.to_sql(file_name, engine, 'public', if_exists='replace', index=False, dtype={'geom': Geometry('Geometry', srid=epsg)})
+    # for the name of the tabel, I can now just put the name of the instance uploaded
+    gdf.to_sql(inst_name, 
+               engine, 
+               'public', 
+               if_exists='replace', 
+               index=False, 
+               dtype={
+                   'geom': Geometry('Geometry', srid=epsg)
+                   }
+                )
 
     """
     Publish shp to geoserver using geoserver rest
     """
 
-    geo.create_featurestore(workspace=wks_name, store_name=ste_name, db=db_params['dbname'], host=db_params['host'], pg_user=db_params['postgres'], pg_password=db_params['password'])
+    geo.create_featurestore(workspace=wks_name, 
+                            store_name=ste_name, 
+                            db=db_params['dbname'], 
+                            host=db_params['host'], 
+                            pg_user=db_params['postgres'], 
+                            pg_password=db_params['password'])
     # shapefile will be published in "data" schema
 
-    geo.publish_featurestore(workspace=wks_name, store_name=ste_name, pg_table=file_name)
+    # geo.publish_featurestore(workspace=wks_name, store_name=ste_name, pg_table=file_name)
+    # for the name of the tabel, I can now just put the name of the instance uploaded
+    geo.publish_featurestore(workspace=wks_name, 
+                             store_name=ste_name, 
+                             pg_table=inst_name)
 
     
 
@@ -151,5 +198,16 @@ def publish_data(sender, instance, created, **kwargs):
 
 
 @receiver(post_delete, sender=Shp)
-def delete_data(sender, instance, created, **kwargs):
+def delete_data(sender, instance, **kwargs):
+    # the content of this class is somehow copied from venv/lib/site-package/geo/Postgres.py 
+    inst_name = instance.name
+
+    db.delete_table(
+            table_name=inst_name,
+            schema=schema_name,
+            dbname=db_params['name']) 
+    # again, here i take directly the name of the uploaded instance
+    
+    geo.delete_layer(inst_name, layer_name)
+
     pass

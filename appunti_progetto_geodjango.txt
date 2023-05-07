@@ -397,3 +397,7 @@ dalla sezione admin shp carica uno shp zippato. o un file qulunwue
 
 esso sara publbiato in geoserver fiche geoserver runna, e anche postgres
 
+
+------ lez 38 ---------
+
+devo farle anche se c e scritto old lesson
