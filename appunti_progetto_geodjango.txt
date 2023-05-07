@@ -371,5 +371,29 @@ in postgres
 
 create schema data;
 
+---------------------
 
+reinstallo tutto su un nuovo pc/VM
+
+gli ambienti virtuai non vengono tracciati da git.
+vanno rifatti, attivati e dentro essi reinstallare tutto a partire dai requirements
+
+sudo apt install libgdal-dev
+pip install GDAL==$(gdal-config --version | awk -F'[.]' '{print $1"."$2}')
+
+cat requirements.txt | xargs -n 1 pip install
+
+appena hai reinstallato django
+python manage.py migrate
+
+
+---- lez 37 ----------
+
+
+crea manualmente un workspace "geoapp" dalla ui di geoservers
+ara lo spazio in cui salvero i file
+
+dalla sezione admin shp carica uno shp zippato. o un file qulunwue
+
+esso sara publbiato in geoserver fiche geoserver runna, e anche postgres
 
