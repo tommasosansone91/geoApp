@@ -17,6 +17,9 @@ import glob
 # my idea
 from geoApp.settings import DATABASES
 
+from geoalchemy2 import Geometry, WKTElement
+from geo.Geoserver import Geoserver
+
 
 conn_str = 'postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
     **{
@@ -28,6 +31,8 @@ conn_str = 'postgresql://{user}:{password}@{host}:{port}/{dbname}'.format(
     }
  )
 
+# initialize the library
+geo = Geoserver('http://127.0.0.1:8080/geoserver', username='admin', password='geoserver')
 
 # the shapefile model
 
@@ -54,22 +59,33 @@ def publish_data(sender, instance, created, **kwargs):
     # conn_str = 'postgresql://postgres:password@localhost:5432/geoapp'
 
     print('shp_file: ', shp_file)
-    print(file_name)
-    print(file_path)
+    print('file_name: ', file_name)
+    print('file_format: ', file_format)
+    print('file_path: ', file_path)
 
-    if ".zip" in file_name:  # this is my idea to check that the uploaded file is a zip one
+    if "zip" in file_format:  # this is my idea to check that the uploaded file is a zip one
     # extract zipfile
+        print("it's a zip")
+
         with zipfile.ZipFile(shp_file, 'r') as zip_ref:
             zip_ref.extractall(file_path)
 
         os.remove(shp_file) # remove zip file
 
-    # Python glob. glob() method returns a list of files or folders that matches the path specified in the pathname argument.
-    # https://pynative.com/python-glob/#:~:text=Python%20glob.,UNIX%20shell%2Dstyle%20wildcards).
-    shp = glob.glob(r'{}/**/*.shp'.format(file_path), recursive=True)[0] # to get shp
-    # devo usare il primo elemento della lista altrimenti il'uscita di glob.glob è una lista
+        # Python glob. glob() method returns a list of files or folders that matches the path specified in the pathname argument.
+        # https://pynative.com/python-glob/#:~:text=Python%20glob.,UNIX%20shell%2Dstyle%20wildcards).
+        shp = glob.glob(r'{}/**/*.shp'.format(file_path), recursive=True) # to get shp
+        # se il file è uno zip, devo usare il primo elemento della lista altrimenti il'uscita di glob.glob è una lista
+        req_shp = shp[0]
 
-    gdf = gpd.read_file(shp)
+    else:
+        # Python glob. glob() method returns a list of files or folders that matches the path specified in the pathname argument.
+        # https://pynative.com/python-glob/#:~:text=Python%20glob.,UNIX%20shell%2Dstyle%20wildcards).
+        shp = glob.glob(r'{}/**/*.shp'.format(file_path), recursive=True) # to get shp
+        req_shp = shp[0]
+
+    
+    gdf = gpd.read_file(req_shp)  # make geodataframe
 
 
     crs_name = str(gdf.crs.srs)
@@ -97,9 +113,10 @@ def publish_data(sender, instance, created, **kwargs):
     Publish shp to geoserver using geoserver rest
     """
 
-    geo.create_featurestore(store_name='geoApp', workspqce='demo', db='postgres', host='localhost', pg_user='postgres', pg_password='password')
+    geo.create_featurestore(store_name='geoApp', workspace='geoapp', db='geoapp', host='localhost', pg_user='postgres', pg_password='password')
+    # shapefile will be published in "data" schema
 
-    geo.publish_featurestore(workspace='demo', store_name='postgis', pg_table='jamoat-db')
+    geo.publish_featurestore(workspace='geoapp', store_name='geoApp', pg_table=file_name)
 
 
 
