@@ -72,19 +72,12 @@ def publish_data(sender, instance, created, **kwargs):
 
         os.remove(shp_file) # remove zip file
 
-        # Python glob. glob() method returns a list of files or folders that matches the path specified in the pathname argument.
-        # https://pynative.com/python-glob/#:~:text=Python%20glob.,UNIX%20shell%2Dstyle%20wildcards).
-        shp = glob.glob(r'{}/**/*.shp'.format(file_path), recursive=True) # to get shp
-        # se il file è uno zip, devo usare il primo elemento della lista altrimenti il'uscita di glob.glob è una lista
-        req_shp = shp[0]
+    # Python glob. glob() method returns a list of files or folders that matches the path specified in the pathname argument.
+    # https://pynative.com/python-glob/#:~:text=Python%20glob.,UNIX%20shell%2Dstyle%20wildcards).
+    shp = glob.glob(r'{}/**/*.shp'.format(file_path), recursive=True) # to get shp
+    # se il file è uno zip, devo usare il primo elemento della lista altrimenti il'uscita di glob.glob è una lista
+    req_shp = shp[0]
 
-    else:
-        # Python glob. glob() method returns a list of files or folders that matches the path specified in the pathname argument.
-        # https://pynative.com/python-glob/#:~:text=Python%20glob.,UNIX%20shell%2Dstyle%20wildcards).
-        shp = glob.glob(r'{}/**/*.shp'.format(file_path), recursive=True) # to get shp
-        req_shp = shp[0]
-
-    
     gdf = gpd.read_file(req_shp)  # make geodataframe
 
 
