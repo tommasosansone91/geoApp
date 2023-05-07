@@ -20,21 +20,53 @@ from geoApp.settings import DATABASES
 from geoalchemy2 import Geometry, WKTElement
 from geo.Geoserver import Geoserver
 
+from geo.Postgres import Db
+# this one import from venv/lib/site-package/geo/Postgres.py where a Db class is defined
 
-conn_str = 'postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
-    **{
+# import db credentials, 
+# set workspace and store names
+# set geoserver credentials
+# set connection string (url)
+#------------------------------------------------------
+
+# so I don't have to hardcode credentials but just to import them form only one place: settings.py
+db_params = {
         'user':     DATABASES['default']['USER'],
         'password': DATABASES['default']['PASSWORD'],
         'host':     DATABASES['default']['HOST'],
         'port':     DATABASES['default']['PORT'],
-        'dbname':   DATABASES['default']['NAME'],
+        'dbname':   DATABASES['default']['NAME'],    
+}
+
+
+# the connection string is created on base of db params defined in settins.py, 
+
+conn_str = 'postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
+    **{
+        'user':     db_params['user'],
+        'password': db_params['password'],
+        'host':     db_params['host'],
+        'port':     db_params['port'],
+        'dbname':   db_params['name'],
     }
  )
 
-# initialize the library
-geo = Geoserver('http://127.0.0.1:8080/geoserver', username='admin', password='geoserver')
-
 # the workspace is created once by user in geoserver UI
+wks_name='geoapp'
+ste_name='geoApp'
+
+gs_params = {
+    'user': 'admin',
+    'password': 'geoserver'
+}
+
+# initialize the library
+geo = Geoserver('http://127.0.0.1:8080/geoserver', username=gs_params['user'], password=gs_params['password'])
+
+
+
+
+
 
 # the shapefile model
 
@@ -108,10 +140,12 @@ def publish_data(sender, instance, created, **kwargs):
     Publish shp to geoserver using geoserver rest
     """
 
-    geo.create_featurestore(store_name='geoApp', workspace='geoapp', db='geoapp', host='localhost', pg_user='postgres', pg_password='password')
+    geo.create_featurestore(workspace=wks_name, store_name=ste_name, db=db_params['dbname'], host=db_params['host'], pg_user=db_params['postgres'], pg_password=db_params['password'])
     # shapefile will be published in "data" schema
 
-    geo.publish_featurestore(workspace='geoapp', store_name='geoApp', pg_table=file_name)
+    geo.publish_featurestore(workspace=wks_name, store_name=ste_name, pg_table=file_name)
+
+    
 
 
 
