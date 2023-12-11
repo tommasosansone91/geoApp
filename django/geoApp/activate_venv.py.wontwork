@@ -1,0 +1,27 @@
+import subprocess
+
+"""
+cd django/geoApp
+source ../venv/bin/activate
+python manage.py runserver
+"""
+
+"""
+activate virtual environment if its name is venv and it is located in the parent directory of the current one
+"""
+
+subprocess.run('pwd')
+subprocess.run('ls ..')
+# subprocess.run('source ../venv/bin/activate')
+
+"""
+
+L'errore che stai ricevendo indica che il comando ls .. non è stato eseguito correttamente a causa di un errore di directory. Probabilmente il problema è che il percorso di lavoro corrente non è quello che pensi, quindi quando viene eseguito il comando ls .., non viene trovata la directory corrente, poiché il percorso di lavoro corrente non ha un genitore.
+
+Puoi risolvere questo problema fornendo il percorso completo della directory che desideri elencare, anziché utilizzare il comando .. per indicare la directory genitore.
+
+Ad esempio, invece di subprocess.run('ls ..'), puoi provare subprocess.run('ls /path/to/parent/directory'), sostituendo "/path/to/parent/directory" con il percorso completo della directory genitore.
+
+Inoltre, il comando source ../venv/bin/activate non può essere eseguito tramite subprocess.run in questo modo, perché l'attivazione dell'ambiente virtuale richiede di modificare la shell corrente e questo non è possibile tramite subprocess.run. Devi invece attivare manualmente l'ambiente virtuale prima di eseguire lo script, eseguendo il comando source ../venv/bin/activate nella shell corrente.
+
+"""

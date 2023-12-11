@@ -10,9 +10,92 @@ poi clickdestro sul file per aprirlo nel browser
 -------------------------------
 
 installazione postgres e pgadmin4
+-----------------------------------
 
-seguendo
-https://computingforgeeks.com/how-to-install-pgadmin-4-on-ubuntu/
+install postgresql 13
+----------------------
+
+
+sudo apt update && sudo apt -y full-upgrade
+[ -f /var/run/reboot-required ] && sudo reboot -f
+
+sudo reboot
+
+sudo apt update
+sudo apt install curl gpg gnupg2 software-properties-common apt-transport-https lsb-release ca-certificates
+
+curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
+
+echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
+
+
+sudo apt update
+
+sudo apt install postgresql-13 postgresql-client-13
+
+systemctl status postgresql@13-main.service
+
+# check the port where postgres is rnning
+
+sudo apt install net-tools
+
+sudo netstat -lntp | grep postgres
+
+# configure postgres
+----------------
+
+sudo -i -u postgres
+
+psql
+
+\conninfo
+
+ALTER USER postgres WITH PASSWORD 'postgres';
+
+# not really needed
+
+# create database "postgres-local";
+
+# grant all privileges on database "postgres-local" to postgres;
+
+# CREATE EXTENSION postgis;
+
+
+ctrl+D
+ctrl+D
+
+
+# install pgadmin4
+------------------------
+
+curl  -fsSL https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/pgadmin.gpg
+
+sudo sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list'
+
+cat /etc/apt/sources.list.d/pgadmin4.list
+
+sudo apt update
+
+sudo apt install pgadmin4 -y
+
+systemctl status apache2
+
+sudo /usr/pgadmin4/bin/setup-web.sh
+
+sudo ufw allow http
+
+sudo ufw allow https
+
+
+
+---------------
+
+
+
+
+
+
+"""
 
 alla fine ho aggiunto un nuovo server
 
@@ -39,11 +122,20 @@ port
 server group
 Servers
 
+nota: questo server viene creato dall'utente postgres, per il quale devo settare la password in postgres
+
+sudo -i -u postgres
+psql
+
+ALTER USER postgres WITH PASSWORD 'postgres';
+
 
 inoltre ho registrato il mio utente come
 
 tommaso.sansone91@virgilio.it
 M**********91
+
+http://localhost/pgadmin4/login?next=%2Fpgadmin4%2F
 
 ----------------------------------
 
@@ -279,5 +371,33 @@ in postgres
 
 create schema data;
 
+---------------------
+
+reinstallo tutto su un nuovo pc/VM
+
+gli ambienti virtuai non vengono tracciati da git.
+vanno rifatti, attivati e dentro essi reinstallare tutto a partire dai requirements
+
+sudo apt install libgdal-dev
+pip install GDAL==$(gdal-config --version | awk -F'[.]' '{print $1"."$2}')
+
+cat requirements.txt | xargs -n 1 pip install
+
+appena hai reinstallato django
+python manage.py migrate
 
 
+---- lez 37 ----------
+
+
+crea manualmente un workspace "geoapp" dalla ui di geoservers
+ara lo spazio in cui salvero i file
+
+dalla sezione admin shp carica uno shp zippato. o un file qulunwue
+
+esso sara publbiato in geoserver fiche geoserver runna, e anche postgres
+
+
+------ lez 38 ---------
+
+devo farle anche se c e scritto old lesson

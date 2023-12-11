@@ -84,13 +84,20 @@ WSGI_APPLICATION = 'geoApp.wsgi.application'
 #     }
 # }
 
+# here i am defining that a database named geoapp is created on a server service of postgres crated on localhost, 
+# with postgres running on port 5432 (can be switched by postgres configs)
+# and that server is uned username postgres and the password for postgres user is 'password'
+# this can b changed in postgres shell (sudo -i -u postgres; psql)
+# with command 
+# ALTER USER postgres WITH PASSWORD 'password';
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         # creo il db dalla interfaccia di pgadmin - db: geoapp
         'NAME': 'geoapp',
         'USER': 'postgres',
-        'PASSWORD': 'password',  # ???
+        'PASSWORD': 'password',  # ALTER USER postgres WITH PASSWORD 'password';
         'HOST': 'localhost',
         'PORT': '5432',
     }

@@ -1,4 +1,6 @@
 la cartella col nome lungo è il download del source coede del corso
+source-code--geodjango-from-dev-to-deployment
+
 
 django: contiene venv e progetto di backend fatto in django
 

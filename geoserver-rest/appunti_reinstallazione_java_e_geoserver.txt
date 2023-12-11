@@ -58,6 +58,9 @@ virtualenv venv
 
 source venv/bin/activate
 
+sudo apt install libgdal-dev
+pip install GDAL==$(gdal-config --version | awk -F'[.]' '{print $1"."$2}')
+
 pip install -r requirements.txt
 
 
@@ -67,15 +70,23 @@ reinstall geoserver from documentation
 ----------------------------------------
 https://docs.geoserver.org/latest/en/user/installation/linux.html
 
+linux: select web archive from https://geoserver.org/release/stable/
+
 downloaded
 and saved into new path
-cd usr/share/
+cd /usr/share/
 sudo mkdir geoserver
 
 cp ..../geoserver-2.22.0-bin.zip  /usr/share/geoserver/
-/usr/share/geoserver/geoserver-2.22.0-bin.zip
+
+---> /usr/share/geoserver/geoserver-2.22.0-bin.zip
 
 unzip via UI
+
+cd /usr/share/geoserver/
+xdg-open .
+
+e.g. /usr/share/geoserver/lib/
 
 run 
 echo "export GEOSERVER_HOME=/usr/share/geoserver" >> ~/.profile
