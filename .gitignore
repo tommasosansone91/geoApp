@@ -3,3 +3,5 @@ source-code--geodjango-from-dev-to-deployment/
 source-code--geodjango-from-dev-to-deployment.zip
 
 django/geoApp/2023/
+
+django/geoApp/*/__pycache__/*

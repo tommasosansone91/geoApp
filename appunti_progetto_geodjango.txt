@@ -371,6 +371,36 @@ in postgres
 
 create schema data;
 
+sotto schemas di geoapp viene salvato lo chema data, nello stesso livello di public
+
+the shapefiles will be stored inside the data schema.
+
+---- lez 37 ---
+
+avvio geoserver e creo un nuovo workspace che chiamo 
+
+geoapp
+geoapp
+
+configuro la funzione receiver che pubblica i dati per publbicarein questo workspace
+
+
+
+sotto schemas di geoapp viene salvato lo chema data, nello stesso livello di public
+
+the shapefiles will be stored inside the data schema.
+
+---- lez 37 ---
+
+avvio geoserver e creo un nuovo workspace che chiamo 
+
+geoapp
+geoapp
+
+configuro la funzione receiver che pubblica i dati per publbicarein questo workspace
+
+
+
 ---------------------
 
 reinstallo tutto su un nuovo pc/VM
