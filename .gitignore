@@ -1,2 +1,6 @@
 # this is the source code for this app, already built by the teacher
 source-code--geodjango-from-dev-to-deployment/
+
+django/geoApp/2023/
+
+django/geoApp/*/__pycache__/*
