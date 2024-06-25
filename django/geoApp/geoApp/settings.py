@@ -149,4 +149,5 @@ STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'geoApp/static') ]
 
 # my adds
 
-DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP = False
+DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP = True
+# the author wants this logic
