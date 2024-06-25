@@ -6,4 +6,4 @@ django/geoApp/2023/
 
 django/geoApp/*/__pycache__/*
 
-django/geoApp/__pycache__/
+django/geoApp/*/migrations/__pycache__/*
