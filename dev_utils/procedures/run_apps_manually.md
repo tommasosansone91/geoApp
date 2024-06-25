@@ -8,7 +8,7 @@ activate virtual environments
 
     source django/venv/bin/activate
 
-run app
+    # run app
 
     cd django/geoApp
 
