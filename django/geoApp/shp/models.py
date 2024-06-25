@@ -192,7 +192,7 @@ def publish_data(sender, instance, created, **kwargs):
                             store_name=ste_name, 
                             db=db_params['dbname'], 
                             host=db_params['host'], 
-                            pg_user=db_params['postgres'], 
+                            pg_user=db_params['user'], 
                             pg_password=db_params['password'])
     # shapefile will be published in "data" schema
 
@@ -221,9 +221,8 @@ def delete_data(sender, instance, **kwargs):
     inst_name = instance.name
 
     db.delete_table(
-            table_name=inst_name,
-            schema=schema_name,
-            dbname=db_params['dbname']) 
+            inst_name,
+            schema=schema_name) 
     # again, here i take directly the name of the uploaded instance
     
     geo.delete_layer(inst_name, layer_name)
