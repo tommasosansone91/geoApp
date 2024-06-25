@@ -96,12 +96,6 @@ db = Pg(
 # class and function definintion
 #---------------------------------
 
-
-
-
-# initialize the library
-geo = Geoserver('http://127.0.0.1:8080/geoserver', username='admin', password='geoserver')
-
 # the shapefile model
 
 # Create your models here.
@@ -146,7 +140,7 @@ def publish_data(sender, instance, created, **kwargs):
         os.remove(shp_file) # remove zip file
 
     else:
-        print("WARNING: shapefile given in input must be in zip format.")
+        print("WARNING: shapefile given in input must be in zip format. It is {}".format(file_format))
 
     # Python glob. glob() method returns a list of files or folders that matches the path specified in the pathname argument.
     # https://pynative.com/python-glob/#:~:text=Python%20glob.,UNIX%20shell%2Dstyle%20wildcards).
