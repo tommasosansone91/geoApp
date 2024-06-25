@@ -9,6 +9,7 @@ cligj==0.7.2
 contourpy==1.0.7
 cycler==0.11.0
 Django==3.1.14
+dnspython==2.6.1
 Fiona==1.9.0
 fonttools==4.38.0
 GDAL==3.6.0
@@ -28,6 +29,7 @@ postgres-helper==0.0.5
 psycopg2==2.9.5
 pycurl==7.45.2
 Pygments==2.14.0
+pymongo==4.7.3
 pyparsing==3.0.9
 pyproj==3.4.1
 python-dateutil==2.8.2
