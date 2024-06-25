@@ -1,28 +1,37 @@
+# pgadmin  credentials
+
 collegarsi a postgres da browser
+
 http://localhost/pgadmin4/login?next=%2Fpgadmin4%2F
 
 il servizio postgres viene startato naturalmente a start della macchina
 
 name
-postgres-local
+
+    postgres-local
 
 username
-postgres
+
+    postgres
 
 pw
-postgres
+
+    postgres
 
 hostanme / address
-127.0.0.1
+
+    127.0.0.1
 
 port
-5432
+
+    5432
 
 server group
-Servers
+
+    Servers
 
 
 inoltre ho registrato il mio utente come
 
-tommaso.sansone91@virgilio.it
-M**********91
+    tommaso.sansone91@virgilio.it
+    M**********91

@@ -1,8 +1,6 @@
 # errors management
 
-    from geo.Geoserver.Postgres import Db
-
-    ModuleNotFoundError: No module named 'geo.Geoserver.Postgres'; 'geo.Geoserver' is not a package
+###    from geo.Geoserver.Postgres import Db <br>ModuleNotFoundError: No module named 'geo.Geoserver.Postgres'; 'geo.Geoserver' is not a package
 
 nell'ultima versione di geo non c'è la classe Db.
 
@@ -21,4 +19,4 @@ devo prendere invece
         port=db_params['port']
         )
 
-this requires pip installing pymongo and postgres-helper
+this requires pip installing pymongo and postgres-helper.
