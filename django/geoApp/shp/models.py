@@ -20,8 +20,11 @@ from geoApp.settings import DATABASES
 from geoalchemy2 import Geometry, WKTElement
 from geo.Geoserver import Geoserver
 
-from geo.Geoserver.Postgres import Db
+# from geo.Geoserver.Postgres import Db
 # this one import from venv/lib/site-package/geo/Postgres.py where a Db class is defined
+# this is deprecated. this module and class do not exist anymore.
+
+from pg.pg import Pg
 
 # import db credentials, 
 # set workspace and store names
@@ -47,7 +50,7 @@ conn_str = 'postgresql://{user}:{password}@{host}:{port}/{dbname}'.format(
         'password': db_params['password'],
         'host':     db_params['host'],
         'port':     db_params['port'],
-        'dbname':   db_params['name'],
+        'dbname':   db_params['dbname'],
     }
  )
 
@@ -80,8 +83,8 @@ geo = Geoserver(
             )
 
 
-# initialize the Db class
-db = Db(
+# initialize the Pg class
+db = Pg(
     dbname=db_params['dbname'], 
     user=db_params['user'], 
     password=db_params['password'], 
@@ -226,7 +229,7 @@ def delete_data(sender, instance, **kwargs):
     db.delete_table(
             table_name=inst_name,
             schema=schema_name,
-            dbname=db_params['name']) 
+            dbname=db_params['dbname']) 
     # again, here i take directly the name of the uploaded instance
     
     geo.delete_layer(inst_name, layer_name)
