@@ -57,16 +57,16 @@ conn_str = 'postgresql://{user}:{password}@{host}:{port}/{dbname}'.format(
  )
 
 # the workspace is created once by user in geoserver UI
-wks_name='geoapp'
+wksp_name='geoapp'
 
 # store_name
 ste_name='geoApp'
 
 # schema name
-schema_name = 'data'
+schm_name = 'data'
 
 # layer name
-layer_name = wks_name
+layer_name = wksp_name
 
 
 gsrv_params = {
@@ -191,7 +191,7 @@ def publish_data(sender, instance, created, **kwargs):
 
     print("getting workspace:", geo.get_workspace('geoApp'))
 
-    geo.create_featurestore(workspace=wks_name, 
+    geo.create_featurestore(workspace=wksp_name, 
                             store_name=ste_name, 
                             db=db_params['dbname'], 
                             host=db_params['host'], 
@@ -199,18 +199,25 @@ def publish_data(sender, instance, created, **kwargs):
                             pg_password=db_params['password'])
     # shapefile will be published in "data" schema
 
-    # geo.publish_featurestore(workspace=wks_name, store_name=ste_name, pg_table=file_name)
+    # geo.publish_featurestore(workspace=wksp_name, store_name=ste_name, pg_table=file_name)
     # for the name of the tabel, I can now just put the name of the instance uploaded
-    geo.publish_featurestore(workspace=wks_name, 
+    geo.publish_featurestore(workspace=wksp_name, 
                              store_name=ste_name, 
                              pg_table=inst_name)
 
-    
+    # edit style
+    sty_name = 'geoApp_shp'
+    geo.create_outline_featurestyle(sty_name, workspace=wksp_name)
+    # the first argument is the output style name
 
-    geo.create_featurestore(store_name='geoApp', workspace='geoapp', db='geoapp', host='localhost', pg_user='postgres', pg_password='postgres', schema='data')
+    geo.publish_style(
+        layer_name=layer_name, style_name=sty_name, workspace=wksp_name)
+
+
+    geo.create_featurestore(store_name=ste_name, workspace=wksp_name, db=db_params['dbname'], host=db_params['host'], pg_user=db_params['user'], pg_password=db_params['password'], schema=schm_name)
     # i am adding chema = data perchè shapefile verra pubblicato nello schema di data - controllo su pgadmin
     
-    geo.publish_featurestore(store_name='geoApp', workspace='geoapp', pg_table=file_name)
+    geo.publish_featurestore(store_name=ste_name, workspace=wksp_name, pg_table=file_name)
 
     # geoApp as name of store_name is not really necessary as 
 
@@ -225,7 +232,8 @@ def delete_data(sender, instance, **kwargs):
 
     db.delete_table(
             inst_name,
-            schema=schema_name) 
+            schema=schm_name
+            ) 
     # again, here i take directly the name of the uploaded instance
     
     geo.delete_layer(inst_name, layer_name)
