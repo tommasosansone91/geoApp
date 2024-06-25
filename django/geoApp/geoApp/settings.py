@@ -146,3 +146,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # static files = img, css, js
 #  li mettero nella cartella static
 STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'geoApp/static') ]
+
+# my adds
+
+DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP = False

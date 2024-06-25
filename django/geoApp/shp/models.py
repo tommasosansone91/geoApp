@@ -24,7 +24,9 @@ from geo.Geoserver import Geoserver
 # this one import from venv/lib/site-package/geo/Postgres.py where a Db class is defined
 # this is deprecated. this module and class do not exist anymore.
 
-from pg.pg import Pg
+from pg.pg import Pg  # postgres-helped library made by the course author
+
+from geoApp.settings import DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP
 
 # import db credentials, 
 # set workspace and store names
@@ -130,17 +132,18 @@ def publish_data(sender, instance, created, **kwargs):
     print('file_format: ', file_format)
     print('file_path: ', file_path)
 
-    if "zip" in file_format:  # this is my idea to check that the uploaded file is a zip one
-    # extract zipfile
-        print("it's a zip")
+    if DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP:
+        if "zip" in file_format:  # this is my idea to check that the uploaded file is a zip one
+        # extract zipfile
+            print("it's a zip")
 
-        with zipfile.ZipFile(shp_file, 'r') as zip_ref:
-            zip_ref.extractall(file_path)
+            with zipfile.ZipFile(shp_file, 'r') as zip_ref:
+                zip_ref.extractall(file_path)
 
-        os.remove(shp_file) # remove zip file
+            os.remove(shp_file) # remove zip file
 
-    else:
-        print("WARNING: shapefile given in input must be in zip format. It is {}".format(file_format))
+        else:
+            print("WARNING: shapefile given in input must be in zip format. It is {}".format(file_format))
 
     # Python glob. glob() method returns a list of files or folders that matches the path specified in the pathname argument.
     # https://pynative.com/python-glob/#:~:text=Python%20glob.,UNIX%20shell%2Dstyle%20wildcards).
