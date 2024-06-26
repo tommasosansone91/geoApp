@@ -142,10 +142,12 @@ USE_TZ = True
 # url pattern della cartella in cui risiedono gli static files
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# where the static files are  copied via collectstatic
 
 # static files = img, css, js
 #  li mettero nella cartella static
 STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'geoApp/static') ]
+# where I put my static files
 
 # my adds
 
