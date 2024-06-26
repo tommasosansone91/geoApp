@@ -6,9 +6,6 @@ from django.dispatch import receiver
 
 import geopandas as gpd
 
-from sqlalchemy import *
-from geoalchemy2 import Geometry, WKTElement
-
 import os
 import zipfile
 
@@ -17,7 +14,8 @@ import glob
 # my idea
 from geoApp.settings import DATABASES
 
-from geoalchemy2 import Geometry, WKTElement
+# from sqlalchemy import Geometry, WKTElement
+from sqlalchemy import *
 from geo.Geoserver import Geoserver
 
 # from geo.Geoserver.Postgres import Db
@@ -45,9 +43,39 @@ db_params = {
 }
 
 
-# the connection string is created on base of db params defined in settins.py, 
 
+
+gsrv_credentials = {
+    'user': 'admin',
+    'password': 'geoserver'
+}
+
+# initializations
+#------------------
+
+# initialize the Pg class
+db = Pg(
+    dbname=db_params['dbname'], 
+    user=db_params['user'], 
+    password=db_params['password'], 
+    host=db_params['host'], 
+    port=db_params['port']
+    )
+
+# initialize the library
+geo = Geoserver(
+            'http://127.0.0.1:8080/geoserver', 
+            username=gsrv_credentials['user'], 
+            password=gsrv_credentials['password']
+            )
+
+# the connection string is created on base of db params defined in settins.py, 
 conn_str = 'postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( **db_params )
+
+print("conn_str:\n{}".format(conn_str))
+
+# define proper elelments of geoserver
+#----------------------------------------------
 
 # the workspace is created once by user in geoserver UI
 wksp_name='geoapp'
@@ -59,33 +87,14 @@ ste_name='geoApp'
 schm_name = 'data'
 
 # layer name
-layer_name = 'geoapp'
+layr_name = 'geoapp'
+
+# style name
+sty_name = 'geoApp_shp_style'
 
 
-gsrv_credentials = {
-    'user': 'admin',
-    'password': 'geoserver'
-}
-
-# initializations
-#------------------
-
-# initialize the library
-geo = Geoserver(
-            'http://127.0.0.1:8080/geoserver', 
-            username=gsrv_credentials['user'], 
-            password=gsrv_credentials['password']
-            )
-
-
-# initialize the Pg class
-db = Pg(
-    dbname=db_params['dbname'], 
-    user=db_params['user'], 
-    password=db_params['password'], 
-    host=db_params['host'], 
-    port=db_params['port']
-    )
+class NotAZIPFileError(Exception):
+    pass
 
 
 # class and function definintion
@@ -136,60 +145,86 @@ def publish_data(sender, instance, created, **kwargs):
             os.remove(shp_file) # remove zip file
 
         else:
-            print("WARNING: shapefile given in input must be in zip format. It is {}".format(file_format))
+            raise NotAZIPFileError("The shapefile given in input must be in zip format. It is {}".format(file_format))
 
     # Python glob. glob() method returns a list of files or folders that matches the path specified in the pathname argument.
     # https://pynative.com/python-glob/#:~:text=Python%20glob.,UNIX%20shell%2Dstyle%20wildcards).
     shp = glob.glob(r'{}/**/*.shp'.format(file_path), recursive=True) # to get shp
     # se il file è uno zip, devo usare il primo elemento della lista altrimenti il'uscita di glob.glob è una lista
-    req_shp = shp[0]
-
-    gdf = gpd.read_file(req_shp)  # make geodataframe
 
 
-    crs_name = str(gdf.crs.srs)
+    try:
+        req_shp = shp[0]
 
-    print('crs_name: ', crs_name)
+        gdf = gpd.read_file(req_shp)  # make geodataframe
 
-    epsg = int(crs_name.lower().replace('epsg:', ''))
+        engine = create_engine(conn_str)
+        gdf.to_postgis(
+            con=engine,
+            schema=schm_name,
+            name=inst_name,
+            if_exists="replace")
 
-    if epsg is None:
-        epsg=4326 # wgs84 coordinate system
+        for s in shp:
+            os.remove(s)
 
-    geom_type = gdf.geom_type[1]
+    except Exception as e:
+        for s in shp:
+            os.remove(s)
 
-    engine = create_engine(conn_str)  # create the SQLAlchemy engine to use
+        instance.delete()
+        print("There is problem during shp upload: ", e)
+    
+    # req_shp = shp[0]
 
-    gdf['geom'] = gdf['geometry'].apply(lambda x: WKTElement(x.wkt, srid=epsg))
+    # gdf = gpd.read_file(req_shp)  # make geodataframe
 
-    gdf.drop('geometry', 1, inplace=True)  # drop the geometry column since we already bckup this column with geom
-    # In a future version of pandas all arguments of DataFrame.drop except for the argument 'labels' will be keyword-only.
 
-    # post gdf to the postgresql
-    # gdf.to_sql(file_name, engine, 'public', if_exists='replace', index=False, dtype={'geom': Geometry('Geometry', srid=epsg)})
-    # for the name of the tabel, I can now just put the name of the instance uploaded
-    gdf.to_sql(inst_name, 
-               engine, 
-               'public', 
-               if_exists='replace', 
-               index=False, 
-               dtype={
-                   'geom': Geometry('Geometry', srid=epsg)
-                   }
-                )
+    # crs_name = str(gdf.crs.srs)
+
+    # print('crs_name: ', crs_name)
+
+    # epsg = int(crs_name.lower().replace('epsg:', ''))
+
+    # if epsg is None:
+    #     epsg=4326 # wgs84 coordinate system
+
+    # geom_type = gdf.geom_type[1]
+
+    # engine = create_engine(conn_str)  # create the SQLAlchemy engine to use
+
+    # gdf['geom'] = gdf['geometry'].apply(lambda x: WKTElement(x.wkt, srid=epsg))
+
+    # gdf.drop('geometry', 1, inplace=True)  # drop the geometry column since we already bckup this column with geom
+    # # In a future version of pandas all arguments of DataFrame.drop except for the argument 'labels' will be keyword-only.
+
+    # # post gdf to the postgresql
+    # # gdf.to_sql(file_name, engine, 'public', if_exists='replace', index=False, dtype={'geom': Geometry('Geometry', srid=epsg)})
+    # # for the name of the tabel, I can now just put the name of the instance uploaded
+    # gdf.to_sql(inst_name, 
+    #            engine, 
+    #            'public', 
+    #            if_exists='replace', 
+    #            index=False, 
+    #            dtype={
+    #                'geom': Geometry('Geometry', srid=epsg)
+    #                }
+    #             )
 
     '''
     publish shp to geoserver using geoserver-rest
     '''
 
-    print("getting workspace:", geo.get_workspace('geoApp'))
+    # print("getting workspace:", geo.get_workspace(wksp_name))
 
     geo.create_featurestore(workspace=wksp_name, 
                             store_name=ste_name, 
+                            schema=schm_name,
                             db=db_params['dbname'], 
                             host=db_params['host'], 
                             pg_user=db_params['user'], 
-                            pg_password=db_params['password'])
+                            pg_password=db_params['password']
+                            )
     # shapefile will be published in "data" schema
 
     # geo.publish_featurestore(workspace=wksp_name, store_name=ste_name, pg_table=file_name)
@@ -199,31 +234,15 @@ def publish_data(sender, instance, created, **kwargs):
                              pg_table=inst_name)
 
     # edit style
-    sty_name = 'geoApp_shp'
     geo.create_outline_featurestyle(sty_name, 
                                     workspace=wksp_name)
     # the first argument is the output style name
 
     geo.publish_style(
-        layer_name=layer_name, 
+        layer_name=layr_name, 
         style_name=sty_name, 
         workspace=wksp_name)
 
-
-    geo.create_featurestore(store_name=ste_name, 
-                            workspace=wksp_name, 
-                            db=db_params['dbname'], 
-                            host=db_params['host'], 
-                            pg_user=db_params['user'], 
-                            pg_password=db_params['password'], 
-                            schema=schm_name)
-    # i am adding chema = data perchè shapefile verra pubblicato nello schema di data - controllo su pgadmin
-    
-    geo.publish_featurestore(store_name=ste_name, 
-                             workspace=wksp_name, 
-                             pg_table=file_name)
-
-    # geoApp as name of store_name is not really necessary as 
 
     # workspace si riferisce a geoserver-rest
     #  schema si rieferisce a pgadmin
@@ -231,15 +250,18 @@ def publish_data(sender, instance, created, **kwargs):
 
 @receiver(post_delete, sender=Shp)
 def delete_data(sender, instance, **kwargs):
-    # the content of this class is somehow copied from venv/lib/site-package/geo/Postgres.py 
-    inst_name = instance.name
+    # # the content of this class is somehow copied from venv/lib/site-package/geo/Postgres.py 
+    # inst_name = instance.name
 
-    db.delete_table(
-            inst_name,
-            schema=schm_name
-            ) 
-    # again, here i take directly the name of the uploaded instance
+    # db.delete_table(
+    #         inst_name,
+    #         schema=schm_name
+    #         ) 
+    # # again, here i take directly the name of the uploaded instance
     
-    geo.delete_layer(inst_name, layer_name)
+    # geo.delete_layer(inst_name, layr_name)
 
-    pass
+    # pass
+
+    db.delete_table(instance.name, schema=schm_name)
+    geo.delete_layer(instance.name, layr_name)
