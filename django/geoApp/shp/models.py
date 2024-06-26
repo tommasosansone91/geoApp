@@ -200,17 +200,28 @@ def publish_data(sender, instance, created, **kwargs):
 
     # edit style
     sty_name = 'geoApp_shp'
-    geo.create_outline_featurestyle(sty_name, workspace=wksp_name)
+    geo.create_outline_featurestyle(sty_name, 
+                                    workspace=wksp_name)
     # the first argument is the output style name
 
     geo.publish_style(
-        layer_name=layer_name, style_name=sty_name, workspace=wksp_name)
+        layer_name=layer_name, 
+        style_name=sty_name, 
+        workspace=wksp_name)
 
 
-    geo.create_featurestore(store_name=ste_name, workspace=wksp_name, db=db_params['dbname'], host=db_params['host'], pg_user=db_params['user'], pg_password=db_params['password'], schema=schm_name)
+    geo.create_featurestore(store_name=ste_name, 
+                            workspace=wksp_name, 
+                            db=db_params['dbname'], 
+                            host=db_params['host'], 
+                            pg_user=db_params['user'], 
+                            pg_password=db_params['password'], 
+                            schema=schm_name)
     # i am adding chema = data perchè shapefile verra pubblicato nello schema di data - controllo su pgadmin
     
-    geo.publish_featurestore(store_name=ste_name, workspace=wksp_name, pg_table=file_name)
+    geo.publish_featurestore(store_name=ste_name, 
+                             workspace=wksp_name, 
+                             pg_table=file_name)
 
     # geoApp as name of store_name is not really necessary as 
 
