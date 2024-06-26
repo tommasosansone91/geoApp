@@ -4,7 +4,7 @@
 
 activate virtual environments
 
-    cd .../web-mapping-and-webgis-geodjango
+    cd ~/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango
 
     source django/venv/bin/activate
 
