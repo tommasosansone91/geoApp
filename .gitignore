@@ -7,3 +7,9 @@ django/geoApp/2023/
 django/geoApp/*/__pycache__/*
 
 django/geoApp/*/migrations/__pycache__/*
+
+# these can be collected via collectstatic
+django/geoApp/static
+
+# these are the uploaded files
+django/geoApp/uploaded_files
