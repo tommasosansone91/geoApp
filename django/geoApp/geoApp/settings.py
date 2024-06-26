@@ -151,3 +151,5 @@ STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'geoApp/static') ]
 
 DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP = True
 # the author wants this logic
+
+UPLOADED_FILES_DIR = 'uploaded_files'

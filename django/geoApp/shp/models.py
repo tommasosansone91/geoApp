@@ -27,6 +27,7 @@ from geo.Geoserver import Geoserver
 from pg.pg import Pg  # postgres-helped library made by the course author
 
 from geoApp.settings import DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP
+from shp.configs import uploaded_shp_files_relpath
 
 # import db credentials, 
 # set workspace and store names
@@ -58,10 +59,10 @@ ste_name='geoApp'
 schm_name = 'data'
 
 # layer name
-layer_name = wksp_name
+layer_name = 'geoapp'
 
 
-gsrv_params = {
+gsrv_credentials = {
     'user': 'admin',
     'password': 'geoserver'
 }
@@ -72,8 +73,8 @@ gsrv_params = {
 # initialize the library
 geo = Geoserver(
             'http://127.0.0.1:8080/geoserver', 
-            username=gsrv_params['user'], 
-            password=gsrv_params['password']
+            username=gsrv_credentials['user'], 
+            password=gsrv_credentials['password']
             )
 
 
@@ -96,7 +97,7 @@ db = Pg(
 class Shp(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=1000, blank=True)
-    shp_file = models.FileField(upload_to='%Y/%m/%d')
+    shp_file = models.FileField(upload_to=uploaded_shp_files_relpath)
     uploaded_date = models.DateField(default=datetime.date.today, blank=True)
 
     def __str__(self):
