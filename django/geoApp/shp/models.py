@@ -46,15 +46,7 @@ db_params = {
 
 # the connection string is created on base of db params defined in settins.py, 
 
-conn_str = 'postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
-    **{
-        'user':     db_params['user'],
-        'password': db_params['password'],
-        'host':     db_params['host'],
-        'port':     db_params['port'],
-        'dbname':   db_params['dbname'],
-    }
- )
+conn_str = 'postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( **db_params )
 
 # the workspace is created once by user in geoserver UI
 wksp_name='geoapp'
