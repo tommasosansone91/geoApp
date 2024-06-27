@@ -68,6 +68,7 @@ geo = Geoserver(
             username=gsrv_credentials['user'], 
             password=gsrv_credentials['password']
             )
+#aligned
 
 # the connection string is created on base of db params defined in settins.py, 
 conn_str = 'postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( **db_params )
@@ -93,12 +94,12 @@ layr_name = 'geoapp'
 sty_name = 'geoApp_shp_style'
 
 
-class NotAZIPFileError(Exception):
-    pass
-
 
 # class and function definintion
 #---------------------------------
+
+class NotAZIPFileError(Exception):
+    pass
 
 # the shapefile model
 
@@ -122,7 +123,7 @@ def publish_data(sender, instance, created, **kwargs):
     file_name = os.path.basename(shp_file).split('.')[0]
     file_path = os.path.dirname(shp_file)
 
-    inst_name = instance.name
+    instance_name = instance.name
     # it's going to be the same name we have in admin panel
 
 
@@ -149,9 +150,10 @@ def publish_data(sender, instance, created, **kwargs):
 
     # Python glob. glob() method returns a list of files or folders that matches the path specified in the pathname argument.
     # https://pynative.com/python-glob/#:~:text=Python%20glob.,UNIX%20shell%2Dstyle%20wildcards).
-    shp = glob.glob(r'{}/**/*.shp'.format(file_path), recursive=True) # to get shp
+    shp = glob.glob(r'{}/**/*.shp'.format(file_path), recursive=True) # to get shp, among the n files inside the zip
     # se il file è uno zip, devo usare il primo elemento della lista altrimenti il'uscita di glob.glob è una lista
 
+    print(shp)
 
     try:
         req_shp = shp[0]
@@ -162,7 +164,7 @@ def publish_data(sender, instance, created, **kwargs):
         gdf.to_postgis(
             con=engine,
             schema=schm_name,
-            name=inst_name,
+            name=instance_name,
             if_exists="replace")
 
         for s in shp:
@@ -201,7 +203,7 @@ def publish_data(sender, instance, created, **kwargs):
     # # post gdf to the postgresql
     # # gdf.to_sql(file_name, engine, 'public', if_exists='replace', index=False, dtype={'geom': Geometry('Geometry', srid=epsg)})
     # # for the name of the tabel, I can now just put the name of the instance uploaded
-    # gdf.to_sql(inst_name, 
+    # gdf.to_sql(instance_name, 
     #            engine, 
     #            'public', 
     #            if_exists='replace', 
@@ -215,6 +217,12 @@ def publish_data(sender, instance, created, **kwargs):
     publish shp to geoserver using geoserver-rest
     '''
 
+    # check that the elements exists
+    if not geo.get_workspace(wksp_name):
+        print("create workspace '{}'".fomat(wksp_name))
+        geo.create_workspace(wksp_name)
+
+
     # print("getting workspace:", geo.get_workspace(wksp_name))
 
     geo.create_featurestore(workspace=wksp_name, 
@@ -226,12 +234,16 @@ def publish_data(sender, instance, created, **kwargs):
                             pg_password=db_params['password']
                             )
     # shapefile will be published in "data" schema
+    print("create featurestore")
+    # print(wksp_name, ste_name, schm_name, db_params['dbname'],db_params['host'],db_params['user'], db_params['password'])
 
     # geo.publish_featurestore(workspace=wksp_name, store_name=ste_name, pg_table=file_name)
     # for the name of the tabel, I can now just put the name of the instance uploaded
     geo.publish_featurestore(workspace=wksp_name, 
                              store_name=ste_name, 
-                             pg_table=inst_name)
+                             pg_table=instance_name)
+    print("publish featurestore")
+
 
     # edit style
     geo.create_outline_featurestyle(sty_name, 
@@ -242,6 +254,7 @@ def publish_data(sender, instance, created, **kwargs):
         layer_name=layr_name, 
         style_name=sty_name, 
         workspace=wksp_name)
+    print("publish style")
 
 
     # workspace si riferisce a geoserver-rest
@@ -251,15 +264,15 @@ def publish_data(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=Shp)
 def delete_data(sender, instance, **kwargs):
     # # the content of this class is somehow copied from venv/lib/site-package/geo/Postgres.py 
-    # inst_name = instance.name
+    # instance_name = instance.name
 
     # db.delete_table(
-    #         inst_name,
+    #         instance_name,
     #         schema=schm_name
     #         ) 
     # # again, here i take directly the name of the uploaded instance
     
-    # geo.delete_layer(inst_name, layr_name)
+    # geo.delete_layer(instance_name, layr_name)
 
     # pass
 
