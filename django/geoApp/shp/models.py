@@ -11,9 +11,6 @@ import zipfile
 
 import glob
 
-# my idea
-from geoApp.settings import DATABASES
-
 # from sqlalchemy import Geometry, WKTElement
 from sqlalchemy import *
 from geo.Geoserver import Geoserver
@@ -22,10 +19,19 @@ from geo.Geoserver import Geoserver
 # this one import from venv/lib/site-package/geo/Postgres.py where a Db class is defined
 # this is deprecated. this module and class do not exist anymore.
 
-from pg.pg import Pg  # postgres-helped library made by the course author
+from pg.pg import Pg  # postgres-helper library made by the course author
 
 from geoApp.settings import DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP
+from geoApp.settings import GEOSERVER_CREDENTIALS
+
 from shp.configs import uploaded_shp_files_relpath
+from shp.configs import db_params
+from shp.configs import \
+                        wksp_name,  \
+                        ste_name,   \
+                        schm_name,  \
+                        layr_name,  \
+                        sty_name    \
 
 # import db credentials, 
 # set workspace and store names
@@ -33,22 +39,6 @@ from shp.configs import uploaded_shp_files_relpath
 # set connection string (url)
 #------------------------------------------------------
 
-# so I don't have to hardcode credentials but just to import them form only one place: settings.py
-db_params = {
-        'user':     DATABASES['default']['USER'],
-        'password': DATABASES['default']['PASSWORD'],
-        'host':     DATABASES['default']['HOST'],
-        'port':     DATABASES['default']['PORT'],
-        'dbname':   DATABASES['default']['NAME'],    
-}
-
-
-
-
-gsrv_credentials = {
-    'user': 'admin',
-    'password': 'geoserver'
-}
 
 # initializations
 #------------------
@@ -65,8 +55,8 @@ db = Pg(
 # initialize the library
 geo = Geoserver(
             'http://127.0.0.1:8080/geoserver', 
-            username=gsrv_credentials['user'], 
-            password=gsrv_credentials['password']
+            username=GEOSERVER_CREDENTIALS['user'], 
+            password=GEOSERVER_CREDENTIALS['password']
             )
 #aligned
 
@@ -75,23 +65,6 @@ conn_str = 'postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( **db_
 
 print("conn_str:\n{}".format(conn_str))
 
-# define proper elelments of geoserver
-#----------------------------------------------
-
-# the workspace is created once by user in geoserver UI
-wksp_name='geoapp'
-
-# store_name
-ste_name='geoApp'
-
-# schema name
-schm_name = 'data'
-
-# layer name
-layr_name = 'geoapp'
-
-# style name
-sty_name = 'geoApp_shp_style'
 
 
 
