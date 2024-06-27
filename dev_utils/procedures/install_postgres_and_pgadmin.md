@@ -1,0 +1,73 @@
+# install postgres and pgadmin
+
+## install postgres
+
+Installing postgres 13
+
+    sudo apt update && sudo apt -y full-upgrade
+    [ -f /var/run/reboot-required ] && sudo reboot -f
+
+    sudo reboot
+
+    sudo apt update
+    sudo apt install curl gpg gnupg2 software-properties-common apt-transport-https lsb-release ca-certificates
+
+    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
+
+    echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
+
+    sudo apt update
+
+    sudo apt install postgresql-13 postgresql-client-13
+
+    systemctl status postgresql@13-main.service
+
+check the port where postgres is running
+
+    sudo apt install net-tools
+
+    sudo netstat -lntp | grep postgres
+
+## create database
+
+sudo -i -u postgres
+
+    psql
+
+    \conninfo
+
+    ALTER USER postgres WITH PASSWORD 'postgres';
+
+create database and install extention postgis inside it
+
+    create database "postgres-local";
+
+    grant all privileges on database "postgres-local" to postgres;
+
+    CREATE EXTENSION postgis;
+
+ctrl+D
+ctrl+D
+
+## install pgadmin
+
+installing pgadmin4
+
+    curl  -fsSL https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/pgadmin.gpg
+
+    sudo sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list'
+
+    cat /etc/apt/sources.list.d/pgadmin4.list
+
+    sudo apt update
+
+    sudo apt install pgadmin4 -y
+
+    systemctl status apache2
+
+    sudo /usr/pgadmin4/bin/setup-web.sh
+
+    sudo ufw allow http
+
+    sudo ufw allow https
+
