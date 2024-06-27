@@ -1,7 +1,10 @@
 # info cartelle
 
-la cartella col nome lungo è il download del source coede del corso
-source-code--geodjango-from-dev-to-deployment
+la cartella col nome lungo è il download del source codice del corso
+
+    source-code--geodjango-from-dev-to-deployment
+
+https://github.com/iamtekson/geodjango-from-dev-to-deployment
 
 
 ### django
