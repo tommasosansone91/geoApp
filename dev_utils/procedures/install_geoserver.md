@@ -8,21 +8,6 @@
     sudo apt update
     sudo apt install openjdk-11-jdk
 
-
-## build virtualenv for geoserver-rest
-
-    cd /corsi_udemy/web-mapping-and-webgis-geodjango/geoserver-rest
-
-    virtualenv venv
-
-    source venv/bin/activate
-
-    sudo apt install libgdal-dev
-    pip install GDAL==$(gdal-config --version | awk -F'[.]' '{print $1"."$2}')
-
-    pip install -r requirements.txt
-
-
 ## install geoserver 
 
 following the documentation https://docs.geoserver.org/latest/en/user/installation/linux.html
