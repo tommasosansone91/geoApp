@@ -103,6 +103,8 @@ DATABASES = {
     }
 }
 
+# psql -d geoapp -U postgres -h localhost
+
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
