@@ -119,7 +119,7 @@ class Shp(models.Model):
     # this is to be not visible nor editable by admins
 
     def __str__(self):
-        return self.name
+        return "{} - {}".format(self.id, self.name)
     
     def clean(self):
         super().clean()
