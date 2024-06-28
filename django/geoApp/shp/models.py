@@ -34,7 +34,8 @@ from shp.configs import \
                         sty_name    \
                         
 from shp.configs import generate_uploaded_shp_file_relpath
-from geoApp.settings import MEDIA_ROOT
+from shp.configs import UPLOADED_SHP_FILES_FOLDER_DIR
+
 from geoApp.settings import BASE_DIR
 
 
@@ -100,8 +101,6 @@ class NotAShapefileError(Exception):
     pass
 
 # the shapefile model
-shp_default_relpath_from_media_root='shp/shp_default'
-shp_default_abspath = os.path.join(MEDIA_ROOT, shp_default_relpath_from_media_root)
 
 
 # Create your models here.
@@ -109,13 +108,13 @@ class Shp(models.Model):
 
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=1000, blank=True)
-    shp_file = models.FileField(upload_to=generate_uploaded_shp_file_relpath()) 
-    # maybe here is not required the function to be correct because it will be called in the clean method
-    # this is a file, but in postgres is represented as path
+    shp_file = models.FileField(upload_to=generate_uploaded_shp_file_relpath(UPLOADED_SHP_FILES_FOLDER_DIR)) 
+     # this is a file, but in postgres is represented as path
 
     uploaded_date = models.DateField(default=datetime.date.today, blank=True)
 
     shp_file_folder_path = models.CharField(default='undefined', max_length=1000, blank=True)  
+    # maybe here is not important the default value to be correct, because it will be overwritten by the save method
     # this is to be not visible nor editable by admins
 
     def __str__(self):
@@ -168,15 +167,15 @@ class Shp(models.Model):
 #     current_file_name = os.path.basename(original_path)
 
 #     print("current_file_folder", current_file_folder)
-#     print("shp_default_abspath", shp_default_abspath)
+#     print("SHP_FILES_FOLDER_DEFAULT_ABSPATH", SHP_FILES_FOLDER_DEFAULT_ABSPATH)
 
     
-#     if current_file_folder == shp_default_abspath:
+#     if current_file_folder == SHP_FILES_FOLDER_DEFAULT_ABSPATH:
 
-#         uploaded_shp_file_desired_relpath = generate_uploaded_shp_file_relpath()
+#         uploaded_shp_file_desired_relpath = generate_uploaded_shp_file_relpath(UPLOADED_SHP_FILES_FOLDER_DIR)
 #         uploaded_shp_file_desired_abspath = os.path.join(MEDIA_ROOT, uploaded_shp_file_desired_relpath)
 
-#         print(f"il file '{current_file_name}' si trova al path di default '{shp_default_abspath}'.\nLo sposto al path specifico '{uploaded_shp_file_desired_abspath}'.")
+#         print(f"il file '{current_file_name}' si trova al path di default '{SHP_FILES_FOLDER_DEFAULT_ABSPATH}'.\nLo sposto al path specifico '{uploaded_shp_file_desired_abspath}'.")
     
 
 #         destination_directory = uploaded_shp_file_desired_abspath
@@ -212,9 +211,9 @@ class Shp(models.Model):
 
 #     print("instance.shp_file.path", instance.shp_file.path)
 #     print("instance.shp_file_folder_path", instance.shp_file_folder_path)
-#     print("shp_default_abspath", shp_default_abspath)
+#     print("SHP_FILES_FOLDER_DEFAULT_ABSPATH", SHP_FILES_FOLDER_DEFAULT_ABSPATH)
 
-#     if instance.shp_file_folder_path == shp_default_abspath:
+#     if instance.shp_file_folder_path == SHP_FILES_FOLDER_DEFAULT_ABSPATH:
 
 #         instance.shp_file_folder_path = os.path.dirname(instance.shp_file.path)
         

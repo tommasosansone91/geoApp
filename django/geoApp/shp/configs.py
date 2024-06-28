@@ -1,17 +1,23 @@
 import os
 import datetime
 
-# from geoApp.settings import UPLOADED_FILES_DIR
-from geoApp.settings import DATABASES
-
 
 def generate_current_timestamp():
     return datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
-def generate_uploaded_shp_file_relpath():
+def generate_uploaded_shp_file_relpath(uploaded_shp_files_folder_relpath_from_media_root):
 
-    UPLOADED_SHP_FILES_DIR = 'shp'
-    uploaded_shp_files_relpath_from_media_root = UPLOADED_SHP_FILES_DIR
+    """
+    this function generates the relative path to be passed to "Upload_to" argument of filefield.
+
+    basically, this function thakes the parameter 'uploaded_shp_files_folder_relpath_from_media_root'
+    and join its path before a new folder/series of folders which have some ties with
+    the uploaded file or the uploaded time of upload.
+
+    uploaded_shp_files_folder_relpath_from_media_root:
+    the input of this function must be the piece of path 
+    between the MEDIA_ROOT folder and the filename, extremes excluded.
+    """
 
     # name = instance.name.replace(" ", "_").replace("-", "_").lower()
     timestamp = generate_current_timestamp()
@@ -22,21 +28,23 @@ def generate_uploaded_shp_file_relpath():
 
     # relative path of the folder which will contain the uploaded file
     uploaded_shp_file_relpath = os.path.join(
-        uploaded_shp_files_relpath_from_media_root,  
+        uploaded_shp_files_folder_relpath_from_media_root,  
         current_file_subfolder
         )
 
     # print("generated new uploaded_shp_file_relpath: {}".format(uploaded_shp_file_relpath) )
 
+    # it is a relative path from media folder to the folder immediately before the file
     return uploaded_shp_file_relpath
 
 
-# uploaded_shp_files_relpath = os.path.join(UPLOADED_FILES_DIR, UPLOADED_SHP_FILES_DIR, '%Y/%m/%d')
-# uploaded_shp_files_relpath = os.path.join(UPLOADED_FILES_DIR, UPLOADED_SHP_FILES_DIR, generate_current_timestamp())
+# useless for now
+# SHP_FILES_FOLDER_DEFAULT_RELPATH_FROM_MEDIA_ROOT = 'shp/shp_default'
 
+# SHP_FILES_FOLDER_DEFAULT_ABSPATH = os.path.join(
+#     MEDIA_ROOT, SHP_FILES_FOLDER_DEFAULT_RELPATH_FROM_MEDIA_ROOT)
 
-
-
+UPLOADED_SHP_FILES_FOLDER_DIR = 'shp'
 
 
 

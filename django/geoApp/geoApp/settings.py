@@ -159,8 +159,6 @@ MEDIA_URL = '/media/'
 DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP = True
 # the author wants this logic
 
-# UPLOADED_FILES_DIR = 'uploaded_files'
-
 GEOSERVER_CREDENTIALS = {
     'user': 'admin',
     'password': 'geoserver'

@@ -3,8 +3,6 @@ from django.contrib import admin
 # make my model accessible from the admin interface
 from .models import Shp
 
-from shp.configs import generate_uploaded_shp_file_relpath
-
 
 # Register your models here.
 class ShpAdmin(admin.ModelAdmin):
