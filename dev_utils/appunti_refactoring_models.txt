@@ -1,0 +1,26 @@
+qualsiasi cosa nella classe odello fa si che se modificata richeide di ricoorere le migrazioni
+
+i re iver on son impattati dalle mgirgarzioneini
+
+
+--------------------
+
+se hai due funzioni di segnale definite con @receiver e vuoi che una venga eseguita prima dell'altra, puoi controllare l'ordine di registrazione nel codice:
+
+python
+Copia codice
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+@receiver(post_save, sender=MyModel)
+def my_first_signal(sender, instance, created, **kwargs):
+    # Codice della prima funzione di segnale
+    pass
+
+@receiver(post_save, sender=MyModel)
+def my_second_signal(sender, instance, created, **kwargs):
+    # Codice della seconda funzione di segnale
+    pass
+In questo esempio, my_first_signal verrà eseguita prima di my_second_signal perché è stata registrata prima.
+
+-----------------

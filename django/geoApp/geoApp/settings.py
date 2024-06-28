@@ -152,13 +152,26 @@ STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'geoApp/static') ]
 # where I put my static files
 
 # my adds
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+# lets leave media, by following django defaults
 
 DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP = True
 # the author wants this logic
 
-UPLOADED_FILES_DIR = 'uploaded_files'
+# UPLOADED_FILES_DIR = 'uploaded_files'
 
 GEOSERVER_CREDENTIALS = {
     'user': 'admin',
     'password': 'geoserver'
 }
+
+# reorganizarion of database credentials
+geoapp_db_params = {
+        'user':     DATABASES['default']['USER'],
+        'password': DATABASES['default']['PASSWORD'],
+        'host':     DATABASES['default']['HOST'],
+        'port':     DATABASES['default']['PORT'],
+        'dbname':   DATABASES['default']['NAME'],    
+}
+# psql -d geoapp -U postgres -h localhost

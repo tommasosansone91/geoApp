@@ -11,5 +11,7 @@ django/geoApp/*/migrations/__pycache__/*
 # these can be collected via collectstatic
 django/geoApp/static
 
-# these are the uploaded files
+# these are the uploaded files - old dir
 django/geoApp/uploaded_files
+# these are the uploaded files - new dir
+django/geoApp/media
