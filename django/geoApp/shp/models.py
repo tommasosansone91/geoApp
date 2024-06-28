@@ -109,7 +109,7 @@ class Shp(models.Model):
 
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=1000, blank=True)
-    shp_file = models.FileField(upload_to=shp_default_relpath_from_media_root) 
+    shp_file = models.FileField(upload_to=generate_uploaded_shp_file_relpath()) 
     # maybe here is not required the function to be correct because it will be called in the clean method
     # this is a file, but in postgres is represented as path
 
@@ -127,55 +127,61 @@ class Shp(models.Model):
             raise ValidationError('The file must have .zip extension.')
 
     def save(self, *args, **kwargs):
-        # Valorizza automaticamente shp_file_folder_path
+        # update value of shp_file_folder_path
+        print("Name:", self.shp_file.name)
+        print("Path:", self.shp_file.path)
+        print("URL:", self.shp_file.url)
+        print("Size:", self.shp_file.size)
+        print("File:", self.shp_file.file)
+
         self.shp_file_folder_path = os.path.dirname( self.shp_file.path )
         super().save(*args, **kwargs)
 
 
-@receiver(post_save, sender=Shp)
-def move_shp_file(sender, instance, created, **kwargs):
+# @receiver(post_save, sender=Shp)
+# def move_shp_file(sender, instance, created, **kwargs):
 
-    print("@receiver 'move_shp_file' - activates")
+#     print("@receiver 'move_shp_file' - activates")
 
-    original_path = instance.shp_file.path
+#     original_path = instance.shp_file.path
 
-    current_file_folder = os.path.dirname(original_path)
-    current_file_name = os.path.basename(original_path)
+#     current_file_folder = os.path.dirname(original_path)
+#     current_file_name = os.path.basename(original_path)
 
-    print("current_file_folder", current_file_folder)
-    print("shp_default_abspath", shp_default_abspath)
+#     print("current_file_folder", current_file_folder)
+#     print("shp_default_abspath", shp_default_abspath)
 
     
-    if current_file_folder == shp_default_abspath:
+#     if current_file_folder == shp_default_abspath:
 
-        uploaded_shp_file_desired_relpath = generate_uploaded_shp_file_relpath()
-        uploaded_shp_file_desired_abspath = os.path.join(MEDIA_ROOT, uploaded_shp_file_desired_relpath)
+#         uploaded_shp_file_desired_relpath = generate_uploaded_shp_file_relpath()
+#         uploaded_shp_file_desired_abspath = os.path.join(MEDIA_ROOT, uploaded_shp_file_desired_relpath)
 
-        print(f"il file '{current_file_name}' si trova al path di default '{shp_default_abspath}'.\nLo sposto al path specifico '{uploaded_shp_file_desired_abspath}'.")
+#         print(f"il file '{current_file_name}' si trova al path di default '{shp_default_abspath}'.\nLo sposto al path specifico '{uploaded_shp_file_desired_abspath}'.")
     
 
-        destination_directory = uploaded_shp_file_desired_abspath
+#         destination_directory = uploaded_shp_file_desired_abspath
 
-        try:
-            # Ottieni il nome del file dal percorso originale
-            file_name = os.path.basename(original_path)
+#         try:
+#             # Ottieni il nome del file dal percorso originale
+#             file_name = os.path.basename(original_path)
             
-            # Costruisci il nuovo percorso completo di destinazione
-            destination_path = os.path.join(destination_directory, file_name)
+#             # Costruisci il nuovo percorso completo di destinazione
+#             destination_path = os.path.join(destination_directory, file_name)
 
-            # Crea la directory di destinazione se non esiste
-            os.makedirs(destination_directory, exist_ok=True)
+#             # Crea la directory di destinazione se non esiste
+#             os.makedirs(destination_directory, exist_ok=True)
             
-            # Sposta il file dal percorso originale alla destinazione
-            shutil.move(original_path, destination_path)
+#             # Sposta il file dal percorso originale alla destinazione
+#             shutil.move(original_path, destination_path)
 
-            print(f"File '{file_name}' spostato con successo a '{destination_path}'")
+#             print(f"File '{file_name}' spostato con successo a '{destination_path}'")
 
-        except Exception as e:
-            print(f"Errore durante lo spostamento del file {current_file_name}: {e}")
+#         except Exception as e:
+#             print(f"Errore durante lo spostamento del file {current_file_name}: {e}")
 
-    else:
-        print("nessuno spostamento necessario. il file '{current_file_name}' si trova al path specifico '{uploaded_shp_file_desired_abspath}'.")
+#     else:
+#         print("nessuno spostamento necessario. il file '{current_file_name}' si trova al path specifico '{uploaded_shp_file_desired_abspath}'.")
 
         
 # @receiver(post_save, sender=Shp)

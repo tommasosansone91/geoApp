@@ -21,9 +21,12 @@ def generate_uploaded_shp_file_relpath():
     current_file_subfolder = timestamp
 
     # relative path of the folder which will contain the uploaded file
-    uploaded_shp_file_relpath = os.path.join(uploaded_shp_files_relpath_from_media_root,  current_file_subfolder)
+    uploaded_shp_file_relpath = os.path.join(
+        uploaded_shp_files_relpath_from_media_root,  
+        current_file_subfolder
+        )
 
-    print("generated new uploaded_shp_file_relpath: {}".format(uploaded_shp_file_relpath) )
+    # print("generated new uploaded_shp_file_relpath: {}".format(uploaded_shp_file_relpath) )
 
     return uploaded_shp_file_relpath
 
