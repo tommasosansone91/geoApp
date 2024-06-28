@@ -127,14 +127,18 @@ class Shp(models.Model):
             raise ValidationError('The file must have .zip extension.')
 
     def save(self, *args, **kwargs):
+
+        super().save(*args, **kwargs)
+
         # update value of shp_file_folder_path
-        print("Name:", self.shp_file.name)
-        print("Path:", self.shp_file.path)
-        print("URL:", self.shp_file.url)
-        print("Size:", self.shp_file.size)
-        print("File:", self.shp_file.file)
+        # print("Name:", self.shp_file.name)
+        # print("Path:", self.shp_file.path)
+        # print("URL:", self.shp_file.url)
+        # print("Size:", self.shp_file.size)
+        # print("File:", self.shp_file.file)
 
         self.shp_file_folder_path = os.path.dirname( self.shp_file.path )
+
         super().save(*args, **kwargs)
 
 
