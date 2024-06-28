@@ -100,13 +100,16 @@ class NotAShapefileError(Exception):
     pass
 
 # the shapefile model
+shp_default_relpath_from_media_root='shp/shp_default'
+shp_default_abspath = os.path.join(MEDIA_ROOT, shp_default_relpath_from_media_root)
+
 
 # Create your models here.
 class Shp(models.Model):
 
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=1000, blank=True)
-    shp_file = models.FileField(upload_to='shp_default') 
+    shp_file = models.FileField(upload_to=shp_default_relpath_from_media_root) 
     # maybe here is not required the function to be correct because it will be called in the clean method
     # this is a file, but in postgres is represented as path
 
@@ -135,28 +138,67 @@ def move_shp_file(sender, instance, created, **kwargs):
     print("@receiver 'move_shp_file' - activates")
 
     original_path = instance.shp_file.path
+
+    current_file_folder = os.path.dirname(original_path)
+    current_file_name = os.path.basename(original_path)
+
+    print("current_file_folder", current_file_folder)
+    print("shp_default_abspath", shp_default_abspath)
+
     
-    uploaded_shp_file_desired_relpath = generate_uploaded_shp_file_relpath()
-    uploaded_shp_file_desired_abspath = os.path.join(MEDIA_ROOT, uploaded_shp_file_desired_relpath)
+    if current_file_folder == shp_default_abspath:
 
-    destination_directory = uploaded_shp_file_desired_abspath
+        uploaded_shp_file_desired_relpath = generate_uploaded_shp_file_relpath()
+        uploaded_shp_file_desired_abspath = os.path.join(MEDIA_ROOT, uploaded_shp_file_desired_relpath)
 
-    try:
-        # Ottieni il nome del file dal percorso originale
-        file_name = os.path.basename(original_path)
-        
-        # Costruisci il nuovo percorso completo di destinazione
-        destination_path = os.path.join(destination_directory, file_name)
+        print(f"il file '{current_file_name}' si trova al path di default '{shp_default_abspath}'.\nLo sposto al path specifico '{uploaded_shp_file_desired_abspath}'.")
+    
 
-        # Crea la directory di destinazione se non esiste
-        os.makedirs(destination_directory, exist_ok=True)
+        destination_directory = uploaded_shp_file_desired_abspath
+
+        try:
+            # Ottieni il nome del file dal percorso originale
+            file_name = os.path.basename(original_path)
+            
+            # Costruisci il nuovo percorso completo di destinazione
+            destination_path = os.path.join(destination_directory, file_name)
+
+            # Crea la directory di destinazione se non esiste
+            os.makedirs(destination_directory, exist_ok=True)
+            
+            # Sposta il file dal percorso originale alla destinazione
+            shutil.move(original_path, destination_path)
+
+            print(f"File '{file_name}' spostato con successo a '{destination_path}'")
+
+        except Exception as e:
+            print(f"Errore durante lo spostamento del file {current_file_name}: {e}")
+
+    else:
+        print("nessuno spostamento necessario. il file '{current_file_name}' si trova al path specifico '{uploaded_shp_file_desired_abspath}'.")
+
         
-        # Sposta il file dal percorso originale alla destinazione
-        shutil.move(original_path, destination_path)
+# @receiver(post_save, sender=Shp)
+# def update_field_shp_file_folder_path(sender, instance, created, **kwargs):
+
+#     print("@receiver 'update_field_shp_file_folder_path' - activates")
+
+#     current_file_name = os.path.basename(instance.shp_file.path)
+
+#     print("instance.shp_file.path", instance.shp_file.path)
+#     print("instance.shp_file_folder_path", instance.shp_file_folder_path)
+#     print("shp_default_abspath", shp_default_abspath)
+
+#     if instance.shp_file_folder_path == shp_default_abspath:
+
+#         instance.shp_file_folder_path = os.path.dirname(instance.shp_file.path)
         
-        print(f"File '{file_name}' spostato con successo a '{destination_path}'")
-    except Exception as e:
-        print(f"Errore durante lo spostamento del file: {e}")
+#         try:
+#             instance.save()
+#             print(f"campo shp_file_folder_path del file '{current_file_name}' aggiornato con successo a '{instance.shp_file_folder_path}'")
+#         except Exception as e:
+#             print(f"Errore durante l'aggiornamento del campo shp_file_folder_path del file {current_file_name}: {e}")
+        
 
 
 # @receiver(post_save, sender=Shp)
