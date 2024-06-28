@@ -17,8 +17,4 @@ class ShpAdmin(admin.ModelAdmin):
     # Aggiungere una virgola dopo l'elemento assicura che 
     # Python lo interpreti correttamente come una tupla.
 
-    # def save_model(self, request, obj, form, change):
-    #     obj.shp_file_folder_path = generate_uploaded_shp_file_relpath()  # Imposta il valore desiderato
-    #     super().save_model(request, obj, form, change)
-
 admin.site.register(Shp, ShpAdmin)

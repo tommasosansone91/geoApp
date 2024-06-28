@@ -130,6 +130,8 @@ class Shp(models.Model):
 
         super().save(*args, **kwargs)
 
+        print("File saved at path {}".format(self.shp_file.path))
+
         # update value of shp_file_folder_path
         # print("Name:", self.shp_file.name)
         # print("Path:", self.shp_file.path)
@@ -140,6 +142,19 @@ class Shp(models.Model):
         self.shp_file_folder_path = os.path.dirname( self.shp_file.path )
 
         super().save(*args, **kwargs)
+
+
+    # def delete(self, *args, **kwargs):
+    # this method does not work - do not use it. use receivers
+    #     print("remove file at path {}".format(self.shp_file.path))
+    #     try:
+    #         os.remove(self.shp_file.path)
+    #     except Exception as e:
+    #         print("could not delete file {}".format(self.shp_file.path))
+
+    #     # Chiama il metodo delete del genitore
+    #     super().delete(*args, **kwargs)
+
 
 
 # @receiver(post_save, sender=Shp)
@@ -364,6 +379,19 @@ class Shp(models.Model):
 
 #     # workspace si riferisce a geoserver-rest
 #     #  schema si rieferisce a pgadmin
+
+# method 2 to delete the file associated with the model
+@receiver(post_delete, sender=Shp)
+def delete_file_on_model_delete(sender, instance, **kwargs):
+    # if instance.shp_file:
+    #     if os.path.isfile(instance.shp_file.path):
+    #         os.remove(instance.shp_file.path)
+    try:
+        # os.remove(instance.shp_file.path)
+        shutil.rmtree(instance.shp_file_folder_path)
+        print("Deleted folder {}".format(instance.shp_file_folder_path))
+    except Exception as e:
+        print("Could not delete folder {}\n{}".format(instance.shp_file_folder_path, e))
 
 
 # @receiver(post_delete, sender=Shp)
