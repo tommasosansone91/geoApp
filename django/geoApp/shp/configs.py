@@ -1,7 +1,7 @@
 import os
 import datetime
 
-from geoApp.settings import UncoherentConfigurationsError
+from geoApp.exceptions import UncoherentConfigurationsError
 
 # function define
 #--------------------------------------------------------
@@ -9,7 +9,7 @@ from geoApp.settings import UncoherentConfigurationsError
 def generate_current_timestamp():
     return datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
-def generate_uploaded_shp_file_relpath(uploaded_shp_files_folder_relpath_from_media_root):
+def generate_uploaded_shp_file_relpath(instance, filename):
 
     """
     this function generates the relative path to be passed to "Upload_to" argument of filefield.
@@ -23,8 +23,12 @@ def generate_uploaded_shp_file_relpath(uploaded_shp_files_folder_relpath_from_me
     between the MEDIA_ROOT folder and the filename, extremes excluded.
     """
 
+    uploaded_shp_files_folder_relpath_from_media_root = UPLOADED_SHP_FILES_FOLDER_DIR
+
     # name = instance.name.replace(" ", "_").replace("-", "_").lower()
     timestamp = generate_current_timestamp()
+
+    
 
     # name of the folder which will contain the uploaded file
     # current_file_subfolder = name +  "_" + timestamp
@@ -37,6 +41,8 @@ def generate_uploaded_shp_file_relpath(uploaded_shp_files_folder_relpath_from_me
         )
 
     # print("generated new uploaded_shp_file_relpath: {}".format(uploaded_shp_file_relpath) )
+
+    print(UPLOADED_SHP_FILES_FOLDER_DIR, timestamp,uploaded_shp_file_relpath)
 
     # it is a relative path from media folder to the folder immediately before the file
     return uploaded_shp_file_relpath
