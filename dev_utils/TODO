@@ -1,3 +1,5 @@
-portare tutte la logica di salvataggio e pubblicazione dati dentro il metodo ave.
 
-evitare di scatensare un receiver sembta complicato
+
+far funzionare la pubblicazione dei dati
+
+trovare un modo di hardcodare il ercorso in upload to
