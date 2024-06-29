@@ -1,0 +1,3 @@
+portare tutte la logica di salvataggio e pubblicazione dati dentro il metodo ave.
+
+evitare di scatensare un receiver sembta complicato
