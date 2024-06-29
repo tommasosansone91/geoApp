@@ -1,6 +1,10 @@
 import os
 import datetime
 
+from geoApp.settings import UncoherentConfigurationsError
+
+# function define
+#--------------------------------------------------------
 
 def generate_current_timestamp():
     return datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -38,6 +42,9 @@ def generate_uploaded_shp_file_relpath(uploaded_shp_files_folder_relpath_from_me
     return uploaded_shp_file_relpath
 
 
+# variables define
+#--------------------------------------------
+
 # useless for now
 # SHP_FILES_FOLDER_DEFAULT_RELPATH_FROM_MEDIA_ROOT = 'shp/shp_default'
 
@@ -46,7 +53,10 @@ def generate_uploaded_shp_file_relpath(uploaded_shp_files_folder_relpath_from_me
 
 UPLOADED_SHP_FILES_FOLDER_DIR = 'shp'
 
+UPLOADED_SHP_FILES_MUST_BE_ZIPPED = True
+# if this is true, then also DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP must be true
 
+DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP = True
 
 # define proper elelments of geoserver
 #----------------------------------------------
@@ -65,3 +75,12 @@ layr_name = 'geoapp'
 
 # style name
 sty_name = 'geoApp_shp_style'
+
+
+# variables validation
+#-----------------------
+
+if UPLOADED_SHP_FILES_MUST_BE_ZIPPED == True:
+    if DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP != True:
+        raise UncoherentConfigurationsError(
+            "UPLOADED_SHP_FILES_MUST_BE_ZIPPED is True\nSo DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP must also be True")

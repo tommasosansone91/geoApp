@@ -22,7 +22,9 @@ from geo.Geoserver import Geoserver
 
 from pg.pg import Pg  # postgres-helper library made by the course author
 
-from geoApp.settings import DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP
+from shp.configs import DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP
+from shp.configs import UPLOADED_SHP_FILES_MUST_BE_ZIPPED
+
 from geoApp.settings import GEOSERVER_CREDENTIALS
 from geoApp.settings import geoapp_db_params
 
@@ -122,8 +124,9 @@ class Shp(models.Model):
     
     def clean(self):
         super().clean()
-        if not self.shp_file.name.endswith('.zip'):
-            raise ValidationError('The file must have .zip extension.')
+        if UPLOADED_SHP_FILES_MUST_BE_ZIPPED:
+            if not self.shp_file.name.endswith('.zip'):
+                raise ValidationError('The file must have .zip extension.')
 
     def save(self, *args, **kwargs):
 
@@ -154,75 +157,7 @@ class Shp(models.Model):
     #     # Chiama il metodo delete del genitore
     #     super().delete(*args, **kwargs)
 
-
-
-# @receiver(post_save, sender=Shp)
-# def move_shp_file(sender, instance, created, **kwargs):
-
-#     print("@receiver 'move_shp_file' - activates")
-
-#     original_path = instance.shp_file.path
-
-#     current_file_folder = os.path.dirname(original_path)
-#     current_file_name = os.path.basename(original_path)
-
-#     print("current_file_folder", current_file_folder)
-#     print("SHP_FILES_FOLDER_DEFAULT_ABSPATH", SHP_FILES_FOLDER_DEFAULT_ABSPATH)
-
-    
-#     if current_file_folder == SHP_FILES_FOLDER_DEFAULT_ABSPATH:
-
-#         uploaded_shp_file_desired_relpath = generate_uploaded_shp_file_relpath(UPLOADED_SHP_FILES_FOLDER_DIR)
-#         uploaded_shp_file_desired_abspath = os.path.join(MEDIA_ROOT, uploaded_shp_file_desired_relpath)
-
-#         print(f"il file '{current_file_name}' si trova al path di default '{SHP_FILES_FOLDER_DEFAULT_ABSPATH}'.\nLo sposto al path specifico '{uploaded_shp_file_desired_abspath}'.")
-    
-
-#         destination_directory = uploaded_shp_file_desired_abspath
-
-#         try:
-#             # Ottieni il nome del file dal percorso originale
-#             file_name = os.path.basename(original_path)
-            
-#             # Costruisci il nuovo percorso completo di destinazione
-#             destination_path = os.path.join(destination_directory, file_name)
-
-#             # Crea la directory di destinazione se non esiste
-#             os.makedirs(destination_directory, exist_ok=True)
-            
-#             # Sposta il file dal percorso originale alla destinazione
-#             shutil.move(original_path, destination_path)
-
-#             print(f"File '{file_name}' spostato con successo a '{destination_path}'")
-
-#         except Exception as e:
-#             print(f"Errore durante lo spostamento del file {current_file_name}: {e}")
-
-#     else:
-#         print("nessuno spostamento necessario. il file '{current_file_name}' si trova al path specifico '{uploaded_shp_file_desired_abspath}'.")
-
-        
-# @receiver(post_save, sender=Shp)
-# def update_field_shp_file_folder_path(sender, instance, created, **kwargs):
-
-#     print("@receiver 'update_field_shp_file_folder_path' - activates")
-
-#     current_file_name = os.path.basename(instance.shp_file.path)
-
-#     print("instance.shp_file.path", instance.shp_file.path)
-#     print("instance.shp_file_folder_path", instance.shp_file_folder_path)
-#     print("SHP_FILES_FOLDER_DEFAULT_ABSPATH", SHP_FILES_FOLDER_DEFAULT_ABSPATH)
-
-#     if instance.shp_file_folder_path == SHP_FILES_FOLDER_DEFAULT_ABSPATH:
-
-#         instance.shp_file_folder_path = os.path.dirname(instance.shp_file.path)
-        
-#         try:
-#             instance.save()
-#             print(f"campo shp_file_folder_path del file '{current_file_name}' aggiornato con successo a '{instance.shp_file_folder_path}'")
-#         except Exception as e:
-#             print(f"Errore durante l'aggiornamento del campo shp_file_folder_path del file {current_file_name}: {e}")
-        
+# #----------------------------------
 
 
 # @receiver(post_save, sender=Shp)
@@ -232,19 +167,15 @@ class Shp(models.Model):
 
 #     print("@receiver 'publish_data' - activates")
 
-#     zip_file_abspath = instance.shp_file.path
-#     file_format = os.path.basename(zip_file_abspath).split('.')[-1]
-#     file_name = os.path.basename(zip_file_abspath).split('.')[0]  # without the format
-#     file_path = os.path.dirname(zip_file_abspath)
+#     ffile = instance.shp_file.path
+#     file_format = os.path.basename(ffile).split('.')[-1]
+#     file_name = os.path.basename(ffile).split('.')[0]  # without the format
+#     file_path = os.path.dirname(ffile)
 
 #     instance_name = instance.name
-#     # it's going to be the same name we have in admin panel
+# #     # it's going to be the same name we have in admin panel
 
-
-#     # it's the same password that we have in settings
-#     # conn_str = 'postgresql://postgres:password@localhost:5432/geoapp'
-
-#     print('zip_file_abspath: ', zip_file_abspath)
+#     print('ffile: ', ffile)
 #     print('file_name: ', file_name)
 #     print('file_format: ', file_format)
 #     print('file_path: ', file_path)

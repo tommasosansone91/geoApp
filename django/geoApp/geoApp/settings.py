@@ -156,8 +156,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 # lets leave media, by following django defaults
 
-DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP = True
-# the author wants this logic
+
 
 GEOSERVER_CREDENTIALS = {
     'user': 'admin',
@@ -173,3 +172,6 @@ geoapp_db_params = {
         'dbname':   DATABASES['default']['NAME'],    
 }
 # psql -d geoapp -U postgres -h localhost
+
+class UncoherentConfigurationsError(Exception):
+    pass
