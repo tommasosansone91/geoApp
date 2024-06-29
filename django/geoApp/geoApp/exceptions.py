@@ -16,4 +16,9 @@ class UncoherentConfigurationsError(Exception):
     pass
 
 class GeoserverNotRespondingError(RequestException):
+    # cannot get any response
+    pass
+
+class GeoserverNotAvailableError(RequestException):
+    # generic
     pass

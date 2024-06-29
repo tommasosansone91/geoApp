@@ -49,6 +49,9 @@ from shp.instantiate_connections import \
                                     
 from shp.process_shapefile import publish_shp_geo_data
 
+from geoApp.geo_system_check import check_geoserver_status
+from geoApp.exceptions import GeoserverNotAvailableError
+
 # import db credentials, 
 # set workspace and store names
 # set geoserver credentials
@@ -110,6 +113,10 @@ class Shp(models.Model):
         self.shp_file_folder_path = os.path.dirname( self.shp_file.path )
 
         # -------------- receiver logic -------------------
+
+        geoserver_response_code = check_geoserver_status()
+        if geoserver_response_code != 200:
+            raise GeoserverNotAvailableError("Status code from geoserver is not 200")
 
         publish_shp_geo_data(self)
 
