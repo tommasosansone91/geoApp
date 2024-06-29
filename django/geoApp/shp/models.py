@@ -96,11 +96,19 @@ conn_str:
 # class and function definintion
 #---------------------------------
 
-class NotAZIPFileError(Exception):
+class NotAZipFileError(Exception):
     pass
 
 class NotAShapefileError(Exception):
     pass
+
+class NoShapeFileFoundError(Exception):
+    pass
+
+class TooManyShapeFileFoundError(Exception):
+    pass
+
+
 
 # the shapefile model
 
@@ -125,11 +133,15 @@ class Shp(models.Model):
     def clean(self):
         super().clean()
         if UPLOADED_SHP_FILES_MUST_BE_ZIPPED:
+            print("File validation: UPLOADED_SHP_FILES_MUST_BE_ZIPPED")
             if not self.shp_file.name.endswith('.zip'):
                 raise ValidationError('The file must have .zip extension.')
+            else:
+                print("validation passed")
+                pass
 
     def save(self, *args, **kwargs):
-
+        print("custom Shp save method - ACTIVATES")
         super().save(*args, **kwargs)
 
         print("File saved at path {}".format(self.shp_file.path))
@@ -145,6 +157,8 @@ class Shp(models.Model):
 
         super().save(*args, **kwargs)
 
+        # here the receivers can be triggered
+
 
     # def delete(self, *args, **kwargs):
     # this method does not work - do not use it. use receivers
@@ -157,162 +171,153 @@ class Shp(models.Model):
     #     # Chiama il metodo delete del genitore
     #     super().delete(*args, **kwargs)
 
-# #----------------------------------
+#----------------------------------
 
 
-# @receiver(post_save, sender=Shp)
-# def publish_data(sender, instance, created, **kwargs):
-#     # this will publish the shapefile to the db.
-#     # the data is first uploaded, then published to the geosverer
+@receiver(post_save, sender=Shp)
+def publish_geo_data_on_model_shp_save(sender, instance, created, **kwargs):
+    # this will publish the shapefile to the db.
+    # the data is first uploaded, then published to the geosverer
 
-#     print("@receiver 'publish_data' - activates")
+    print("@receiver 'publish_geo_data_on_model_shp_save' - ACTIVATES")
 
-#     ffile = instance.shp_file.path
-#     file_format = os.path.basename(ffile).split('.')[-1]
-#     file_name = os.path.basename(ffile).split('.')[0]  # without the format
-#     file_path = os.path.dirname(ffile)
+    shp_file_abspath = instance.shp_file.path
+    file_name = os.path.basename(shp_file_abspath)
+    file_format = os.path.basename(shp_file_abspath).split('.')[-1]
+    file_name_noext = os.path.basename(shp_file_abspath).split('.')[0]  # without the format
+    shp_file_folder_abspath = os.path.dirname(shp_file_abspath)
 
-#     instance_name = instance.name
-# #     # it's going to be the same name we have in admin panel
+    instance_name = instance.name
+#     # it's going to be the same name we have in admin panel
 
-#     print('ffile: ', ffile)
-#     print('file_name: ', file_name)
-#     print('file_format: ', file_format)
-#     print('file_path: ', file_path)
+    print('shp_file_abspath: ', shp_file_abspath)
+    print('file_name: ', file_name)
+    print('file_name_noext: ', file_name_noext)
+    print('file_format: ', file_format)
+    print('shp_file_folder_abspath: ', shp_file_folder_abspath)
 
-#     if DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP:
-#         if "zip" in file_format:  # this is my idea to check that the uploaded file is a zip one
-#         # extract zipfile
-#             print("ok, it is a zip.")
+    if DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP:
+        if "zip" in file_format:  # this is my idea to check that the uploaded file is a zip one
+        # extract zipfile
+            print(
+                "{} is a zip file!\nExtracting content in folder {}".format(
+                file_name, shp_file_folder_abspath)
+                )
 
-#             with zipfile.ZipFile(zip_file_abspath, 'r') as zip_ref:
-#                 zip_ref.extractall(file_path)
+            zip_file_abspath = shp_file_abspath
 
-#             os.remove(zip_file_abspath) # remove zip file
+            with zipfile.ZipFile(zip_file_abspath, 'r') as zip_ref:
+                zip_ref.extractall(shp_file_folder_abspath)
 
-#         else:
-#             raise NotAZIPFileError("ERROR: The shapefile given in input must be in zip format. It is {}".format(file_format))
-#             # qui serve che si inneschi un delete senza raise error.
+            os.remove(zip_file_abspath)  # remove zip file
 
-#     # Python glob. glob() method returns a list of files or folders that matches the path specified in the pathname argument.
-#     # https://pynative.com/python-glob/#:~:text=Python%20glob.,UNIX%20shell%2Dstyle%20wildcards).
-#     shp = glob.glob(r'{}/**/*.shp'.format(file_path), recursive=True) # to get shp, among the n files inside the zip
-#     # se il file è uno zip, devo usare il primo elemento della lista altrimenti il'uscita di glob.glob è una lista
+        else:
+            if UPLOADED_SHP_FILES_MUST_BE_ZIPPED:
+                raise NotAZipFileError("ERROR: The shapefile given in input must be in zip format. It is {}".format(file_format))
 
-#     #  cerca tutti i file con estensione .shp all'interno della directory specificata da file_path 
-#     # e in tutte le sue sottodirectory 
-#     # e restituisce una lista di questi percorsi di file.
 
-#     print(shp)
 
-#     try:
-#         req_shp = shp[0]
-
-#         gdf = gpd.read_file(req_shp)  # make geodataframe
-
-#         engine = create_engine(conn_str)
-#         gdf.to_postgis(
-#             con=engine,
-#             schema=schm_name,
-#             name=instance_name,
-#             if_exists="replace")
-
-#         for s in shp:
-#             os.remove(s)
-
-#     except Exception as e:
-#         for s in shp:
-#             os.remove(s)
-
-#         instance.delete()
-#         print("There is problem during shp upload: ", e)
+    # Python glob. glob() method returns a list of files or folders that matches the path specified in the pathname argument.
+    # https://pynative.com/python-glob/#:~:text=Python%20glob.,UNIX%20shell%2Dstyle%20wildcards).
     
-#     # req_shp = shp[0]
+    shp_files_list = glob.glob(
+        r'{}/**/*.shp'.format(shp_file_folder_abspath), 
+        recursive=True
+        ) # to get shp, among the n files inside the zip
+    # se il file è uno zip, devo usare il primo elemento della lista altrimenti il'uscita di glob.glob è una lista
 
-#     # gdf = gpd.read_file(req_shp)  # make geodataframe
+    #  cerca tutti i file con estensione .shp all'interno della directory specificata da shp_file_folder_abspath 
+    # e in tutte le sue sottodirectory 
+    # e restituisce una lista di questi percorsi di file.
 
+    print(shp_files_list)
 
-#     # crs_name = str(gdf.crs.srs)
+    if len(shp_files_list) == 0:
+        raise NoShapeFileFoundError("No shapefile found.")
 
-#     # print('crs_name: ', crs_name)
+    if len(shp_files_list) > 1:
+        raise TooManyShapeFileFoundError("Too many shapefile found.")
+    
+    try:
+        req_shp = shp_files_list[0]
 
-#     # epsg = int(crs_name.lower().replace('epsg:', ''))
+        gdf = gpd.read_file(req_shp)  # make geodataframe
 
-#     # if epsg is None:
-#     #     epsg=4326 # wgs84 coordinate system
+        engine = create_engine(conn_str)
+        gdf.to_postgis(
+            con=engine,
+            schema=schm_name,
+            name=instance_name,
+            if_exists="replace")
+            # how to manage the fact that an instance could overwrite another on geoserver 
+            # but not on django model ?
+            # see geopandas options
 
-#     # geom_type = gdf.geom_type[1]
+        print("instance {} was sent to_postgis!".format(instance_name))
 
-#     # engine = create_engine(conn_str)  # create the SQLAlchemy engine to use
+        for s in shp_files_list:
+            os.remove(s)
 
-#     # gdf['geom'] = gdf['geometry'].apply(lambda x: WKTElement(x.wkt, srid=epsg))
+    except Exception as e:
+        for s in shp_files_list:
+            os.remove(s)
 
-#     # gdf.drop('geometry', 1, inplace=True)  # drop the geometry column since we already bckup this column with geom
-#     # # In a future version of pandas all arguments of DataFrame.drop except for the argument 'labels' will be keyword-only.
-
-#     # # post gdf to the postgresql
-#     # # gdf.to_sql(file_name, engine, 'public', if_exists='replace', index=False, dtype={'geom': Geometry('Geometry', srid=epsg)})
-#     # # for the name of the tabel, I can now just put the name of the instance uploaded
-#     # gdf.to_sql(instance_name, 
-#     #            engine, 
-#     #            'public', 
-#     #            if_exists='replace', 
-#     #            index=False, 
-#     #            dtype={
-#     #                'geom': Geometry('Geometry', srid=epsg)
-#     #                }
-#     #             )
-
-#     '''
-#     publish shp to geoserver using geoserver-rest
-#     '''
-
-#     # check that the elements exists
-#     if not geo.get_workspace(wksp_name):
-#         print("create workspace '{}'".fomat(wksp_name))
-#         geo.create_workspace(wksp_name)
-
-
-#     # print("getting workspace:", geo.get_workspace(wksp_name))
-
-#     geo.create_featurestore(workspace=wksp_name, 
-#                             store_name=ste_name, 
-#                             schema=schm_name,
-#                             db=geoapp_db_params['dbname'], 
-#                             host=geoapp_db_params['host'], 
-#                             pg_user=geoapp_db_params['user'], 
-#                             pg_password=geoapp_db_params['password']
-#                             )
-#     # shapefile will be published in "data" schema
-#     print("create featurestore")
-#     # print(wksp_name, ste_name, schm_name, geoapp_db_params['dbname'],geoapp_db_params['host'],geoapp_db_params['user'], geoapp_db_params['password'])
-
-#     # geo.publish_featurestore(workspace=wksp_name, store_name=ste_name, pg_table=file_name)
-#     # for the name of the tabel, I can now just put the name of the instance uploaded
-#     geo.publish_featurestore(workspace=wksp_name, 
-#                              store_name=ste_name, 
-#                              pg_table=instance_name)
-#     print("publish featurestore")
+        instance.delete()
+        print("There was a problem during shp upload: ", e)
+        print("Shp instance {} was deleted".format(shp_file_abspath))
 
 
-#     # edit style
-#     geo.create_outline_featurestyle(sty_name, 
-#                                     workspace=wksp_name)
-#     # the first argument is the output style name
+    '''
+    publish shp to geoserver using geoserver-rest
+    '''
 
-#     geo.publish_style(
-#         layer_name=layr_name, 
-#         style_name=sty_name, 
-#         workspace=wksp_name)
-#     print("publish style")
+    # check that the elements exists
+    if not geo.get_workspace(wksp_name):
+        print("create workspace '{}'".format(wksp_name))
+        geo.create_workspace(wksp_name)
 
 
-#     # workspace si riferisce a geoserver-rest
-#     #  schema si rieferisce a pgadmin
+    # print("getting workspace:", geo.get_workspace(wksp_name))
+
+    geo.create_featurestore(workspace=wksp_name, 
+                            store_name=ste_name, 
+                            schema=schm_name,
+                            db=geoapp_db_params['dbname'], 
+                            host=geoapp_db_params['host'], 
+                            pg_user=geoapp_db_params['user'], 
+                            pg_password=geoapp_db_params['password']
+                            )
+    # shapefile will be published in "data" schema
+    # print("created featurestore: {}".format(ste_name))
+    # print(wksp_name, ste_name, schm_name, geoapp_db_params['dbname'],geoapp_db_params['host'],geoapp_db_params['user'], geoapp_db_params['password'])
+
+    # geo.publish_featurestore(workspace=wksp_name, store_name=ste_name, pg_table=file_name_noext)
+    # for the name of the tabel, I can now just put the name of the instance uploaded
+    geo.publish_featurestore(workspace=wksp_name, 
+                             store_name=ste_name, 
+                             pg_table=instance_name)
+    print("published featurestore: {}\npg_table: {}".format(ste_name, instance_name))
+
+
+    # edit style
+    geo.create_outline_featurestyle(sty_name, 
+                                    workspace=wksp_name)
+    # the first argument is the output style name
+
+    geo.publish_style(
+        layer_name=layr_name, 
+        style_name=sty_name, 
+        workspace=wksp_name)
+    print("published style {} for layer {}".format(sty_name, layr_name))
+
+
+    # workspace si riferisce a geoserver-rest
+    #  schema si rieferisce a pgadmin
+
 
 # method 2 to delete the file associated with the model
 @receiver(post_delete, sender=Shp)
-def delete_file_on_model_delete(sender, instance, **kwargs):
+def delete_file_on_model_shp_delete(sender, instance, **kwargs):
     # if instance.shp_file:
     #     if os.path.isfile(instance.shp_file.path):
     #         os.remove(instance.shp_file.path)
@@ -324,43 +329,25 @@ def delete_file_on_model_delete(sender, instance, **kwargs):
         print("Could not delete folder {}\n{}".format(instance.shp_file_folder_path, e))
 
 
-# @receiver(post_delete, sender=Shp)
-# def delete_data(sender, instance, **kwargs):
-#     print("@receiver 'delete_data' activates")
-#     # # the content of this class is somehow copied from venv/lib/site-package/geo/Postgres.py 
-#     # instance_name = instance.name
-
-#     # db.delete_table(
-#     #         instance_name,
-#     #         schema=schm_name
-#     #         ) 
-#     # # again, here i take directly the name of the uploaded instance
+@receiver(post_delete, sender=Shp)
+def delete_geo_data_on_model_shp_delete(sender, instance, **kwargs):
+    print("@receiver 'delete_geo_data_on_model_shp_delete' - ACTIVATES")
+    # # the content of this class is somehow copied from venv/lib/site-package/geo/Postgres.py 
     
-#     # geo.delete_layer(instance_name, layr_name)
+    instance_name = instance.name
 
-#     # pass
+    # delete the content that was sent to_postgis
+    db.delete_table(
+            instance_name,
+            schema=schm_name
+            ) 
+    # again, here I take directly the name of the uploaded instance
+    
+    # delete the layer
+    geo.delete_layer(instance_name, layr_name)
 
-#     # remove object from db
-#     db.delete_table(instance.name, schema=schm_name)
-
-#     # remove object form geoserver
-#     geo.delete_layer(instance.name, layr_name)
-
-#     # remove files form local dir
-
-#     zip_file_abspath = instance.shp_file.path
-#     print("zip_file_abspath", zip_file_abspath)
-#     # zip_file_format = os.path.basename(zip_file_abspath).split('.')[-1]
-#     file_name = os.path.basename(zip_file_abspath).split('.')[0]
-#     print("file_name", file_name)
-
-
-#     unpacked_files_dir = os.path.dirname(zip_file_abspath)
-
-#     print("delete directory '{}' and all files inside it".format(unpacked_files_dir))
-#     # shutil.rmtree(unpacked_files_dir)
-
-#     file_path = os.path.dirname(zip_file_abspath)
+    # remove object form geoserver
+    geo.delete_layer(instance.name, layr_name)
 
 
 
