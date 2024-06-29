@@ -71,6 +71,8 @@ class Shp(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=1000, blank=True)
     shp_file = models.FileField(upload_to="shp/%Y%m%d_%H%M%S") 
+    # shp_file = models.FileField(upload_to=generate_uploaded_shp_file_relpath(UPLOADED_SHP_FILES_FOLDER_DIR) ) 
+    
      # this is a file, but in postgres is represented as path
 
     uploaded_date = models.DateField(default=datetime.date.today, blank=True)
