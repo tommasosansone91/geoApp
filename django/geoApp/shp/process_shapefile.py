@@ -46,7 +46,7 @@ from shp.instantiate_connections import \
 def publish_shp_geo_data(instance):
         print("publish_shp_geo_data function - ACTIVATES")
 
-        print(instance)
+        print("instance: {}".format(instance))
 
         shp_file_abspath = instance.shp_file.path
         file_name = os.path.basename(shp_file_abspath)
@@ -57,17 +57,17 @@ def publish_shp_geo_data(instance):
         instance_name = instance.name
         # it's going to be the same name we have in admin panel
 
-        print('shp_file_abspath: ', shp_file_abspath)
-        print('file_name: ', file_name)
-        print('file_name_noext: ', file_name_noext)
-        print('file_format: ', file_format)
-        print('shp_file_folder_abspath: ', shp_file_folder_abspath)
+        # print('shp_file_abspath: ', shp_file_abspath)
+        # print('file_name: ', file_name)
+        # print('file_name_noext: ', file_name_noext)
+        # print('file_format: ', file_format)
+        # print('shp_file_folder_abspath: ', shp_file_folder_abspath)
 
         if DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP:
             if "zip" in file_format:  # this is my idea to check that the uploaded file is a zip one
             # extract zipfile
                 print(
-                    "{} is a zip file!\nExtracting content in folder {}".format(
+                    "The uploaded file {} is a zip file!\nExtracting its content of  in folder {}".format(
                     file_name, shp_file_folder_abspath)
                     )
 
@@ -97,7 +97,7 @@ def publish_shp_geo_data(instance):
         # e in tutte le sue sottodirectory 
         # e restituisce una lista di questi percorsi di file.
 
-        print(shp_files_list)
+        # print(shp_files_list)
 
         if len(shp_files_list) == 0:
             raise NoShapeFileFoundError("No shapefile found.")
@@ -107,6 +107,7 @@ def publish_shp_geo_data(instance):
         
         try:
             req_shp = shp_files_list[0]
+            print("Detected shapefile: {}".format(req_shp))
 
             gdf = gpd.read_file(req_shp)  # make geodataframe
 
@@ -120,7 +121,7 @@ def publish_shp_geo_data(instance):
                 # but not on django model ?
                 # see geopandas options
 
-            print("instance {} was sent to_postgis!".format(instance_name))
+            print("Instance {} was sent to_postgis!".format(instance_name))
 
             for s in shp_files_list:
                 os.remove(s)

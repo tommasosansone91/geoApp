@@ -91,7 +91,7 @@ class Shp(models.Model):
             if not self.shp_file.name.endswith('.zip'):
                 raise ValidationError('The file must have .zip extension.')
             else:
-                print("validation passed")
+                print("> validation passed!")
                 pass
 
     def save(self, *args, **kwargs):
