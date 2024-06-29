@@ -114,9 +114,9 @@ class Shp(models.Model):
 
         # -------------- receiver logic -------------------
 
-        geoserver_response_code = check_geoserver_status()
-        if geoserver_response_code != 200:
-            raise GeoserverNotAvailableError("Status code from geoserver is not 200")
+        
+        check_geoserver_status()
+        
 
         publish_shp_geo_data(self)
 

@@ -6,6 +6,7 @@ from geoApp.geo_system_configs import GEOSERVER_URL
 # check_geoserver_status()
 
 def check_geoserver_status():
+    print("Checking geoserver availability...")
     try:
         response = requests.get(GEOSERVER_URL)
         if response.status_code == 200:
