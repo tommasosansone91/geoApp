@@ -15,5 +15,3 @@ django/geoApp/static
 # django/geoApp/uploaded_files
 # these are the uploaded files - new dir
 django/geoApp/media
-
-portavia
