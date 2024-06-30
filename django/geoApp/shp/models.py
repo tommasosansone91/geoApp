@@ -144,6 +144,7 @@ class Shp(models.Model):
 # method 2 to delete the file associated with the model
 @receiver(post_delete, sender=Shp)
 def delete_file_on_model_shp_delete(sender, instance, **kwargs):
+    print("@receiver 'delete_file_on_model_shp_delete' - Instance: {}".format(instance))
     # if instance.shp_file:
     #     if os.path.isfile(instance.shp_file.path):
     #         os.remove(instance.shp_file.path)
@@ -172,8 +173,6 @@ def delete_geo_data_on_model_shp_delete(sender, instance, **kwargs):
     # delete the layer
     geo.delete_layer(instance_name, layr_name)
 
-    # remove object form geoserver
-    geo.delete_layer(instance.name, layr_name)
 
 
 
