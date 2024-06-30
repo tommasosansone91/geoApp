@@ -98,7 +98,7 @@ class Shp(models.Model):
                 pass
 
     def save(self, *args, **kwargs):
-        print("custom Shp save method - ACTIVATES")
+        print("custom Shp save method - ACTIVATES - Instance: {}".format(self))
         super().save(*args, **kwargs)
 
         print("File saved at path {}".format(self.shp_file.path))
@@ -157,7 +157,7 @@ def delete_file_on_model_shp_delete(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Shp)
 def delete_geo_data_on_model_shp_delete(sender, instance, **kwargs):
-    print("@receiver 'delete_geo_data_on_model_shp_delete' - ACTIVATES")
+    print("@receiver 'delete_geo_data_on_model_shp_delete' - Instance: {}".format(instance))
     # # the content of this class is somehow copied from venv/lib/site-package/geo/Postgres.py 
     
     instance_name = instance.name

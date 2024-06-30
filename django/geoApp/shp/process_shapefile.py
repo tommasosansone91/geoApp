@@ -44,9 +44,7 @@ from shp.instantiate_connections import \
 
 
 def publish_shp_geo_data(instance):
-        print("publish_shp_geo_data function - ACTIVATES")
-
-        print("instance: {}".format(instance))
+        print("publish_shp_geo_data function - ACTIVATES - Instance: {}".format(instance))
 
         shp_file_abspath = instance.shp_file.path
         file_name = os.path.basename(shp_file_abspath)
