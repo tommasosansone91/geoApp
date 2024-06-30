@@ -137,3 +137,16 @@ Note
 Il callable generate_uploaded_shp_file_relpath viene passato direttamente all'argomento upload_to di FileField.
 La funzione genera un percorso relativo unico basato sul timestamp corrente ogni volta che un nuovo file viene caricato, garantendo così che ogni percorso sia unico.
 Salva le modifiche e prova a caricare nuovamente i file. Questa soluzione dovrebbe risolvere il problema e generare percorsi unici per ogni file caricato.
+
+### FutureWarning: Neither gdal.UseExceptions() nor gdal.DontUseExceptions() has been explicitly called. In GDAL 4.0, exceptions will be enabled by default.
+
+(venv) tommaso@tommaso-virtualbox02:~/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango/geoserver-rest$ python geoserver-rest.py
+/home/tommaso/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango/geoserver-rest/venv/lib/python3.10/site-packages/osgeo/gdal.py:312: FutureWarning: Neither gdal.UseExceptions() nor gdal.DontUseExceptions() has been explicitly called. In GDAL 4.0, exceptions will be enabled by default.
+  warnings.warn(
+
+pe4r risolvere chiama uno di questi
+
+from osgeo import gdal
+gdal.UseExceptions()    # Enable exceptions
+gdal.DontUseExceptions()
+
