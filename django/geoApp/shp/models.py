@@ -42,7 +42,7 @@ from geoApp.settings import BASE_DIR
 
 from django.core.exceptions import ValidationError
 
-from shp.instantiate_connections import \
+from geoApp.instantiate_connections import \
                                         geo,        \
                                         db,         \
                                         conn_str    \

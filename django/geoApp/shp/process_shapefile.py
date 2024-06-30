@@ -37,7 +37,7 @@ from geoApp.exceptions import \
                         NoShapeFileFoundError,      \
                         TooManyShapeFileFoundError  \
 
-from shp.instantiate_connections import \
+from geoApp.instantiate_connections import \
                                         geo,        \
                                         db,         \
                                         conn_str    \
@@ -110,6 +110,7 @@ def publish_shp_geo_data(instance):
             gdf = gpd.read_file(req_shp)  # make geodataframe
 
             engine = create_engine(conn_str)
+
             gdf.to_postgis(
                 con=engine,
                 schema=schm_name,
@@ -165,6 +166,8 @@ def publish_shp_geo_data(instance):
         
         print("published featurestore: {}\npg_table: {}".format(ste_name, instance_name))
 
+        # this does not work
+
 
         # edit style
         geo.create_outline_featurestyle(sty_name, 
@@ -178,6 +181,7 @@ def publish_shp_geo_data(instance):
         
         print("published style {} for layer {}".format(sty_name, layr_name))
 
+        # tested: style is published
 
         # workspace si riferisce a geoserver-rest
         #  schema si rieferisce a pgadmin
