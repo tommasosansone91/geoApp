@@ -28,7 +28,7 @@ from shp.configs import UPLOADED_SHP_FILES_MUST_BE_ZIPPED
 from geoApp.geo_system_configs import GEOSERVER_CREDENTIALS
 from geoApp.geo_system_configs import geoapp_db_params
 
-from geoApp.geo_system_configs import \
+from shp.configs import \
                         wksp_name,  \
                         ste_name,   \
                         schm_name,  \
@@ -63,7 +63,10 @@ from geoApp.exceptions import GeoserverNotAvailableError
 #---------------------------------
 
 
-
+# ensure geoserver is active, otherwise, do not allow the app to start
+check_geoserver_status()
+# here the error raised by check_geoserver_status() is not managed.
+# so if it occurs, it crashes the app.
 
 # the shapefile model
 
@@ -99,6 +102,16 @@ class Shp(models.Model):
 
     def save(self, *args, **kwargs):
         print("custom Shp save method - ACTIVATES - Instance: {}".format(self))
+
+        try:
+            check_geoserver_status()
+        except GeoserverNotAvailableError as e:
+            print(e)
+            # here the error raised by check_geoserver_status() is intercepted and managed,
+            # then allowing the app to launch a return to 
+            # prevent data save
+            return
+        
         super().save(*args, **kwargs)
 
         print("File saved at path {}".format(self.shp_file.path))
@@ -112,10 +125,7 @@ class Shp(models.Model):
 
         self.shp_file_folder_path = os.path.dirname( self.shp_file.path )
 
-        # -------------- receiver logic -------------------
-
-        
-        check_geoserver_status()
+        # -------------- receiver logic -------------------       
         
 
         publish_shp_geo_data(self)
