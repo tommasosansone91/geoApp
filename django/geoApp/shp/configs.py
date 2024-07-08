@@ -1,5 +1,5 @@
 import os
-import datetime
+
 
 from geoApp.exceptions import UncoherentConfigurationsError
 from geoApp.utils import generate_current_timestamp

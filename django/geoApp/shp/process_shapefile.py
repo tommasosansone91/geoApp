@@ -9,13 +9,10 @@ import glob
 
 # from sqlalchemy import Geometry, WKTElement
 from sqlalchemy import *
-from geo.Geoserver import Geoserver
 
 # from geo.Geoserver.Postgres import Db
 # this one import from venv/lib/site-package/geo/Postgres.py where a Db class is defined
 # this is deprecated. this module and class do not exist anymore.
-
-from pg.pg import Pg  # postgres-helper library made by the course author
 
 from shp.configs import DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP
 from shp.configs import UPLOADED_SHP_FILES_MUST_BE_ZIPPED

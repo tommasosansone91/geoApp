@@ -1,32 +1,20 @@
 from django.db import models
 import datetime
 
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_delete
 from django.dispatch import receiver
-
-import geopandas as gpd
 
 import os
 import shutil
-import zipfile
-
-import glob
 
 # from sqlalchemy import Geometry, WKTElement
 from sqlalchemy import *
-from geo.Geoserver import Geoserver
 
 # from geo.Geoserver.Postgres import Db
 # this one import from venv/lib/site-package/geo/Postgres.py where a Db class is defined
 # this is deprecated. this module and class do not exist anymore.
 
-from pg.pg import Pg  # postgres-helper library made by the course author
-
-from shp.configs import DETECT_AND_UNZIP_LOADED_ZIPFILE_IN_SHP
 from shp.configs import UPLOADED_SHP_FILES_MUST_BE_ZIPPED
-
-from geoApp.geo_system_configs import GEOSERVER_CREDENTIALS
-from geoApp.geo_system_configs import geoapp_db_params
 
 from shp.configs import \
                         wksp_name,  \
@@ -35,10 +23,6 @@ from shp.configs import \
                         layr_name,  \
                         sty_name    \
                         
-from shp.configs import generate_uploaded_shp_file_relpath
-from shp.configs import UPLOADED_SHP_FILES_FOLDER_DIR
-
-from geoApp.settings import BASE_DIR
 
 from django.core.exceptions import ValidationError
 
