@@ -33,9 +33,6 @@ ste_name='geoApp'
 # schema name
 schm_name = 'data'
 
-# layer name
-layr_name = 'geoapp'
-
 # style name
 sty_name = 'geoApp_shp_style'
 
