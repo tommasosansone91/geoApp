@@ -24,7 +24,6 @@ from shp.configs import \
                         wksp_name,  \
                         ste_name,   \
                         schm_name,  \
-                        layr_name,  \
                         sty_name    \
                         
 
@@ -146,13 +145,14 @@ def publish_shp_geo_data(instance):
         geo.create_featurestore(workspace=wksp_name, 
                                 store_name=ste_name, 
                                 schema=schm_name,
+
                                 db=geoapp_db_params['dbname'], 
                                 host=geoapp_db_params['host'], 
                                 pg_user=geoapp_db_params['user'], 
                                 pg_password=geoapp_db_params['password']
                                 )
         # shapefile will be published in "data" schema
-        # print("created featurestore: {}".format(ste_name))
+        print("shp:\n\tcreated featurestore: {}".format(ste_name))
         # print(wksp_name, ste_name, schm_name, geoapp_db_params['dbname'],geoapp_db_params['host'],geoapp_db_params['user'], geoapp_db_params['password'])
 
         # geo.publish_featurestore(workspace=wksp_name, store_name=ste_name, pg_table=file_name_noext)
@@ -161,7 +161,7 @@ def publish_shp_geo_data(instance):
                                 store_name=ste_name, 
                                 pg_table=instance_name)
         
-        print("published featurestore: {}\npg_table: {}".format(ste_name, instance_name))
+        print("shp:\n\tpublished featurestore: {}\n\tpg_table: {}".format(ste_name, instance_name))
 
         # this does not work
 
@@ -171,12 +171,15 @@ def publish_shp_geo_data(instance):
                                         workspace=wksp_name)
         # the first argument is the output style name
 
+        print("shp:\n\tcreated outline featurestyle {}".format(sty_name))
+
+
         geo.publish_style(
-            layer_name=layr_name, 
+            layer_name=instance_name, 
             style_name=sty_name, 
             workspace=wksp_name)
         
-        print("published style {} for layer {}".format(sty_name, layr_name))
+        print("shp:\n\tpublished style {} for shp layer {}".format(sty_name, instance_name))
 
         # tested: style is published
 

@@ -20,7 +20,6 @@ from shp.configs import \
                         wksp_name,  \
                         ste_name,   \
                         schm_name,  \
-                        layr_name,  \
                         sty_name    \
                         
 
@@ -165,7 +164,9 @@ def delete_geo_data_on_model_shp_delete(sender, instance, **kwargs):
     # again, here I take directly the name of the uploaded instance
     
     # delete the layer
-    geo.delete_layer(instance_name, layr_name)
+    geo.delete_layer(instance_name, wksp_name)
+
+    print("Deleted layer {} and table {}".format(instance_name, instance_name))
 
 
 
