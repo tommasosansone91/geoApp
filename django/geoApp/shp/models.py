@@ -99,13 +99,14 @@ class Shp(models.Model):
 
         print("File saved at path {}".format(self.shp_file.path))
 
-        # update value of shp_file_folder_path
+
         # print("Name:", self.shp_file.name)
         # print("Path:", self.shp_file.path)
         # print("URL:", self.shp_file.url)
         # print("Size:", self.shp_file.size)
         # print("File:", self.shp_file.file)
 
+        # update value of shp_file_folder_path
         self.shp_file_folder_path = os.path.dirname( self.shp_file.path )
 
         # -------------- receiver logic -------------------       
