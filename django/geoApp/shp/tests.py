@@ -15,6 +15,10 @@ from geoApp.geo_system_check import check_geoserver_status
 import os
 from geoApp.settings import BASE_DIR
 
+import pprint 
+
+pp = pprint.PrettyPrinter(indent=4)
+
 # ensure geoserver is active, otherwise, do not allow the app to start
 check_geoserver_status()
 # here the error raised by check_geoserver_status() is not managed.
@@ -40,7 +44,7 @@ class AdminTestCase(TestCase):
         self.client.login(username=self.admin_username, password=self.admin_password)
     
     
-    def test_create_shp_via_admin(self):
+    def test_create_and_delete_shp_via_admin(self):
         # URL per creare un nuovo oggetto Shp nell'admin UI
         #  url = reverse('admin:<app_name>_shp_add')
         url = reverse('admin:shp_shp_add')
@@ -70,7 +74,11 @@ class AdminTestCase(TestCase):
             'shp_file': self.test_shp_file,
             'uploaded_date': self.test_uploaded_date,
         }
-        
+
+        print("\n\nTest the creation of object shp with data:\n")
+        pp.pprint(data)
+        print("\n\n")        
+
         # Inviare una richiesta POST per creare il nuovo oggetto Shp
         response = self.client.post(url, data, follow=True)
         
@@ -79,3 +87,43 @@ class AdminTestCase(TestCase):
 
         self.assertTrue(Shp.objects.filter(name=self.test_name).exists())
 
+        self.assertTrue(
+            Shp.objects.filter(
+                name=self.test_name, 
+                description=self.test_description,
+                uploaded_date=self.test_uploaded_date
+                ).exists()
+            )
+        
+        # this cannot be fully tested as conn_str pints to real db and not the test use-and-destroy db
+
+        print("\n\nTest the deletion of object shp with data:\n")
+        pp.pprint(data)
+        print("\n\n")
+
+        # Recuperare l'oggetto Shp creato
+        shp_to_delete = Shp.objects.get(
+            name=self.test_name, 
+            description=self.test_description,
+            uploaded_date=self.test_uploaded_date
+            )
+        
+        # URL per eliminare un oggetto Shp nell'admin UI
+        url_delete = reverse('admin:shp_shp_delete', args=[shp_to_delete.id])
+        
+        data_delete = {
+            'post': 'yes'
+        }
+        
+        # Inviare una richiesta POST per eliminare l'oggetto Shp
+        response_delete = self.client.post(url_delete, data_delete, follow=True)
+        
+        # Controllare che l'oggetto Shp sia stato eliminato
+        self.assertEqual(response_delete.status_code, 200)
+        self.assertFalse(
+            Shp.objects.filter(
+                name=self.test_name, 
+                description=self.test_description,
+                uploaded_date=self.test_uploaded_date
+                ).exists()
+            )

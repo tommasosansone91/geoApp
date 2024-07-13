@@ -15,6 +15,10 @@ from geoApp.geo_system_check import check_geoserver_status
 import os
 from geoApp.settings import BASE_DIR
 
+import pprint 
+
+pp = pprint.PrettyPrinter(indent=4)
+
 # ensure geoserver is active, otherwise, do not allow the app to start
 check_geoserver_status()
 # here the error raised by check_geoserver_status() is not managed.
@@ -40,7 +44,7 @@ class AdminTestCase(TestCase):
         self.client.login(username=self.admin_username, password=self.admin_password)
     
     
-    def test_create_tiff_via_admin(self):
+    def test_create_and_delete_tiff_via_admin(self):
         # URL per creare un nuovo oggetto Tiff nell'admin UI
         #  url = reverse('admin:<app_name>_tiff_add')
         url = reverse('admin:tiff_tiff_add')
@@ -70,6 +74,10 @@ class AdminTestCase(TestCase):
             'tiff_file': self.test_tiff_file,
             'uploaded_date': self.test_uploaded_date,
         }
+
+        print("\n\nTest the creation of object tiff with data:\n")
+        pp.pprint(data)
+        print("\n\n")
         
         # Inviare una richiesta POST per creare il nuovo oggetto Tiff
         response = self.client.post(url, data, follow=True)
@@ -77,5 +85,41 @@ class AdminTestCase(TestCase):
         # Controllare che il nuovo oggetto Tiff sia stato creato
         self.assertEqual(response.status_code, 200)
 
-        self.assertTrue(Tiff.objects.filter(name=self.test_name).exists())
+        self.assertTrue(
+            Tiff.objects.filter(
+                name=self.test_name, 
+                description=self.test_description,
+                uploaded_date=self.test_uploaded_date
+                ).exists()
+            )
+        
+        print("\n\nTest the deletion of object tiff with data:\n")
+        pp.pprint(data)
+        print("\n\n")
 
+        # Recuperare l'oggetto Tiff creato
+        tiff_to_delete = Tiff.objects.get(
+            name=self.test_name, 
+            description=self.test_description,
+            uploaded_date=self.test_uploaded_date
+            )
+        
+        # URL per eliminare un oggetto Tiff nell'admin UI
+        url_delete = reverse('admin:tiff_tiff_delete', args=[tiff_to_delete.id])
+        
+        data_delete = {
+            'post': 'yes'
+        }
+        
+        # Inviare una richiesta POST per eliminare l'oggetto Tiff
+        response_delete = self.client.post(url_delete, data_delete, follow=True)
+        
+        # Controllare che l'oggetto Tiff sia stato eliminato
+        self.assertEqual(response_delete.status_code, 200)
+        self.assertFalse(
+            Tiff.objects.filter(
+                name=self.test_name, 
+                description=self.test_description,
+                uploaded_date=self.test_uploaded_date
+                ).exists()
+            )
