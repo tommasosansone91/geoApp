@@ -1,6 +1,15 @@
 
 from geoApp.settings import DATABASES
 
+from osgeo import gdal
+
+# handle gdal exceptions
+#----------------------------------------
+
+gdal.UseExceptions()    # Enable exceptions
+# gdal.DontUseExceptions()
+
+
 # define variables
 #-------------------
 
