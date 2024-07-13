@@ -20,7 +20,7 @@ from shp.configs import UPLOADED_SHP_FILES_MUST_BE_ZIPPED
 
 from geoApp.geo_system_configs import geoapp_db_params
 
-from shp.configs import \
+from geoApp.geo_system_configs import \
                         wksp_name,  \
                         ste_name,   \
                         schm_name,  \

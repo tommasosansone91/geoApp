@@ -9,7 +9,7 @@ import shutil
 
 from sqlalchemy import *
 
-from tiff.configs import \
+from geoApp.geo_system_configs import \
                         wksp_name,  \
                         ste_name,   \
                         schm_name

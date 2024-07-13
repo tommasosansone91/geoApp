@@ -18,7 +18,7 @@ from sqlalchemy import *
 
 from geoApp.geo_system_configs import geoapp_db_params
 
-from tiff.configs import \
+from geoApp.geo_system_configs import \
                         wksp_name,  \
                         ste_name,   \
                         schm_name
@@ -86,7 +86,8 @@ def publish_tiff_geo_data(instance):
         geo.publish_style(
             layer_name=instance_name, 
             style_name=instance_name, 
-            workspace=wksp_name)
+            workspace=wksp_name
+            )
         
         print("tiff:\n\tpublished style {} for tiff layer {}".format(instance_name, instance_name))
 

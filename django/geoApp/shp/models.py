@@ -16,11 +16,11 @@ from sqlalchemy import *
 
 from shp.configs import UPLOADED_SHP_FILES_MUST_BE_ZIPPED
 
-from shp.configs import \
-                        wksp_name,  \
-                        ste_name,   \
-                        schm_name,  \
-                        sty_name    \
+from geoApp.geo_system_configs import \
+                                    wksp_name,  \
+                                    ste_name,   \
+                                    schm_name,  \
+                                    sty_name    \
                         
 
 from django.core.exceptions import ValidationError

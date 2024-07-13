@@ -22,6 +22,21 @@ geoapp_db_params = {
 GEOSERVER_URL = "http://localhost:8080/geoserver/web"
 
 
+# define proper elelments of geoserver
+#----------------------------------------------
+
+# the workspace is created once by user in geoserver UI
+wksp_name = 'geoapp'
+
+# store_name
+ste_name = 'geoApp'
+
+# schema name
+schm_name = 'data'
+
+# style name
+sty_name = 'geoApp_shp_style' 
+
 
 # variables validation
 #-----------------------
