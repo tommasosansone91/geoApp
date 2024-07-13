@@ -16,6 +16,14 @@ activate virtual environments
 
     python manage.py runserver
 
+
+### Test the django app
+
+    python manage.py test shp
+
+    python manage.py test tiff
+    
+
 ## geoserver-rest
 
     deactivate
