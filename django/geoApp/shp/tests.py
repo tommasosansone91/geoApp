@@ -48,14 +48,14 @@ class AdminTestCase(TestCase):
         self.test_name = 'Test Shp'
         self.test_description = "This is a test description for test file 'Test shp'"
         
-        self.test_shp_file_path = os.path.join(BASE_DIR, 'shp', 'files_for_tests', 'test_shp_file1.zip')
+        self.test_shp_file_path = os.path.join(BASE_DIR, 'shp', 'files_for_tests', 'C_Jamoat.zip')
 
         with open(self.test_shp_file_path, 'rb') as test_file:
             file_data = test_file.read()
 
         # Creare l'oggetto SimpleUploadedFile
         self.test_shp_file = SimpleUploadedFile(
-            name='test_shp_file1.zip',
+            name='C_Jamoat.zip',
             content=file_data,
             content_type='application/zip'
         )
