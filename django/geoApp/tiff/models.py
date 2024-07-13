@@ -57,9 +57,9 @@ class Tiff(models.Model):
     def clean(self):
         super().clean()
 
-        print("File validation: uploaded tiff files must have .tif extension")
-        if not self.tiff_file.name.endswith('.tif'):
-            raise ValidationError('The file must have .zip extension.')
+        print("File validation: uploaded tiff files must have .tif or .tiff extension")
+        if not self.tiff_file.name.endswith('.tif') and not self.tiff_file.name.endswith('.tiff'):
+            raise ValidationError("The file must have .tif or .tiff extension.")
         else:
             print("> validation passed!")
             pass
