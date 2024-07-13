@@ -35,17 +35,7 @@ from shp.process_shapefile import publish_shp_geo_data
 from geoApp.geo_system_check import check_geoserver_status
 from geoApp.exceptions import GeoserverNotAvailableError
 
-# import db credentials, 
-# set workspace and store names
-# set geoserver credentials
-# set connection string (url)
-#------------------------------------------------------
-
-
-# class and function definintion
-#---------------------------------
-
-
+from geoApp.geo_system_check import check_geoserver_status
 # ensure geoserver is active, otherwise, do not allow the app to start
 check_geoserver_status()
 # here the error raised by check_geoserver_status() is not managed.
