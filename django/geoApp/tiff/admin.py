@@ -6,7 +6,7 @@ from .models import Tiff
 
 # # Register your models here.
 class TiffAdmin(admin.ModelAdmin):
-    fields = ('name', 'description', 'tiff_file', 'uploaded_date')  # Lista di campi da visualizzare nel form
+    fields = ('tiff_file', 'name', 'description', 'uploaded_date')  # Lista di campi da visualizzare nel form
     readonly_fields = ('tiff_file_folder_path',)
 
     # La virgola è necessaria perché in Python, 

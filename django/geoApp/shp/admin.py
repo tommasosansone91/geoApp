@@ -6,7 +6,7 @@ from .models import Shp
 
 # Register your models here.
 class ShpAdmin(admin.ModelAdmin):
-    fields = ('name', 'description', 'shp_file', 'uploaded_date')  # Lista di campi da visualizzare nel form
+    fields = ('shp_file', 'name', 'description', 'uploaded_date')  # Lista di campi da visualizzare nel form
     readonly_fields = ('shp_file_folder_path',)
 
     # La virgola è necessaria perché in Python, 
