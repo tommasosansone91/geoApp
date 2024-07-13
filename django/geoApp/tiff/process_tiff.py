@@ -89,7 +89,7 @@ def publish_tiff_geo_data(instance):
             workspace=wksp_name
             )
         
-        print("tiff:\n\tpublished style {} for tiff layer {}".format(instance_name, instance_name))
+        print("tiff:\n\tpublished style '{}' for tiff layer '{}'".format(instance_name, instance_name))
 
         # tested: style is published
 
