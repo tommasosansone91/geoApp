@@ -8,7 +8,7 @@ import zipfile
 import glob
 
 # from sqlalchemy import Geometry, WKTElement
-from sqlalchemy import *
+from sqlalchemy import create_engine
 
 # from geo.Geoserver.Postgres import Db
 # this one import from venv/lib/site-package/geo/Postgres.py where a Db class is defined
@@ -103,7 +103,7 @@ def publish_shp_geo_data(instance):
             req_shp = shp_files_list[0]
             print("Detected shapefile: {}".format(req_shp))
 
-            gdf = gpd.read_file(req_shp)  # make geodataframe
+            gdf = gpd.read_file(req_shp)  # create a  geodataframe
 
             engine = create_engine(conn_str)
 
@@ -111,7 +111,8 @@ def publish_shp_geo_data(instance):
                 con=engine,
                 schema=schm_name,
                 name=instance_name,
-                if_exists="replace")
+                if_exists="replace"
+            )
                 # how to manage the fact that an instance could overwrite another on geoserver 
                 # but not on django model ?
                 # see geopandas options

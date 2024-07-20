@@ -1,3 +1,3 @@
 # access geoapp db
 
-    # psql -d geoapp -U postgres -h localhost
+    psql -d geoapp -U postgres -h localhost
