@@ -7,7 +7,6 @@ from django.dispatch import receiver
 import os
 import shutil
 
-from sqlalchemy import *
 
 from geoApp.geo_system_configs import \
                         wksp_name,  \
