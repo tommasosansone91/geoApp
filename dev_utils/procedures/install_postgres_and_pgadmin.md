@@ -30,7 +30,7 @@ check the port where postgres is running
 
 ## create database
 
-sudo -i -u postgres
+    sudo -i -u postgres
 
     psql
 
