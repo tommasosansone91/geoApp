@@ -8,7 +8,7 @@ import os
 import shutil
 
 # from sqlalchemy import Geometry, WKTElement
-from sqlalchemy import *
+
 
 # from geo.Geoserver.Postgres import Db
 # this one import from venv/lib/site-package/geo/Postgres.py where a Db class is defined
@@ -36,6 +36,11 @@ from geoApp.geo_system_check import check_geoserver_status
 from geoApp.exceptions import GeoserverNotAvailableError
 
 from geoApp.geo_system_check import check_geoserver_status
+
+from geoApp.utils import has_non_alphanumeric_characters
+
+
+
 # ensure geoserver is active, otherwise, do not allow the app to start
 check_geoserver_status()
 # here the error raised by check_geoserver_status() is not managed.
@@ -64,7 +69,9 @@ class Shp(models.Model):
         return "{} - {}".format(self.id, self.name)
     
     def clean(self):
+
         super().clean()
+
         if UPLOADED_SHP_FILES_MUST_BE_ZIPPED:
             print("File validation: UPLOADED_SHP_FILES_MUST_BE_ZIPPED")
             if not self.shp_file.name.endswith('.zip'):
@@ -72,6 +79,14 @@ class Shp(models.Model):
             else:
                 print("> validation passed!")
                 pass
+
+        print("File validation: field 'name' must contain only alphanumerical or underscore characters.")
+        if has_non_alphanumeric_characters(self.name):
+            raise ValidationError("The field 'name' must contain only alphanumerical or underscore characters.")
+        else:
+            print("> validation passed!")
+            pass
+
 
     def save(self, *args, **kwargs):
         print("custom Shp save method - ACTIVATES - Instance: {}".format(self))
