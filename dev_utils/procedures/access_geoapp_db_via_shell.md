@@ -1,3 +1,3 @@
-# access geoapp db
+# access geoappdb
 
-    psql -d geoapp -U postgres -h localhost
+    psql -d geoappdb -U postgres -h localhost

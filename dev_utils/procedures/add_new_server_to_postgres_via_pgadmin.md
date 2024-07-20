@@ -55,7 +55,17 @@ default server is postgres
 
 default schema is public
 
-### create postgres extention to the database
+### create postgres extenstion to the database
+
+#### method 1
+
+    sudo -i -u postgres
+
+    psql -d geoappdb
+
+    CREATE EXTENSION postgis
+
+#### method 2
 
 from pgadmin toolbar
 
@@ -69,6 +79,11 @@ tool > query tool
 refresh schema
 
     select * from spatial_ref_sys;
+
+this table is created only if the extension was installed successfully
+
+
+### create and fill in tables having geometry fields
 
     create table demo(
         id serial primary key,
