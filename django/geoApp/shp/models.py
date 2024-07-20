@@ -77,14 +77,14 @@ class Shp(models.Model):
             if not self.shp_file.name.endswith('.zip'):
                 raise ValidationError('The file must have .zip extension.')
             else:
-                print("> validation passed!")
+                print("> File extension validation passed!")
                 pass
 
-        print("File validation: field 'name' must contain only alphanumerical or underscore characters.")
+        # print("File validation: field 'name' must contain only alphanumerical or underscore characters.")
         if has_non_alphanumeric_characters(self.name):
             raise ValidationError("The field 'name' must contain only alphanumerical or underscore characters.")
         else:
-            print("> validation passed!")
+            # print("> File name validation passed!")
             pass
 
 

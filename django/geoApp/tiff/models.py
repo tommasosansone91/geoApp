@@ -58,18 +58,18 @@ class Tiff(models.Model):
     def clean(self):
         super().clean()
 
-        print("File validation: uploaded tiff files must have .tif or .tiff extension")
+        # print("File validation: uploaded tiff files must have .tif or .tiff extension")
         if not self.tiff_file.name.endswith('.tif') and not self.tiff_file.name.endswith('.tiff'):
             raise ValidationError("The file must have .tif or .tiff extension.")
         else:
-            print("> validation passed!")
+            # print("> File extension validation passed!")
             pass
 
-        print("File validation: field 'name' must contain only alphanumerical or underscore characters.")
+        # print("File validation: field 'name' must contain only alphanumerical or underscore characters.")
         if has_non_alphanumeric_characters(self.name):
             raise ValidationError("The field 'name' must contain only alphanumerical or underscore characters.")
         else:
-            print("> validation passed!")
+            # print("> File name validation passed!")
             pass
 
     def save(self, *args, **kwargs):
