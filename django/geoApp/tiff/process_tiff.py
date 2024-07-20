@@ -8,7 +8,6 @@ import zipfile
 import glob
 
 # from sqlalchemy import Geometry, WKTElement
-from sqlalchemy import *
 
 # from geo.Geoserver.Postgres import Db
 # this one import from venv/lib/site-package/geo/Postgres.py where a Db class is defined
