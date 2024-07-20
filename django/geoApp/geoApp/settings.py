@@ -95,16 +95,17 @@ WSGI_APPLICATION = 'geoApp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        # creo il db dalla interfaccia di pgadmin - db: geoapp
-        'NAME': 'geoapp',
-        'USER': 'postgres',
-        'PASSWORD': 'password',  # ALTER USER postgres WITH PASSWORD 'password';
+        # creo il db dalla interfaccia di pgadmin - db: geoappdb -  
+        # - va bene anche farlo dalla shell come superuser postgres
+        'NAME': 'geoappdb',
+        'USER': 'geoapp_main',
+        'PASSWORD': 'geomain',  # ALTER USER postgres WITH PASSWORD 'password';
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
 
-# psql -d geoapp -U postgres -h localhost
+# psql -d geoappdb -U geoapp_main -h localhost
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
