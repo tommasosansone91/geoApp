@@ -4,6 +4,7 @@
 
     # start geoserver
 
+    cd ~/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango
     bash dev_utils/geoserver_commands/start_and_open_geoserver.sh
 
 
