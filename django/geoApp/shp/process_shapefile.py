@@ -164,8 +164,6 @@ def publish_shp_geo_data(instance):
         
         print("shp:\n\tpublished featurestore: {}\n\tpg_table: {}".format(ste_name, instance_name))
 
-        # this does not work
-
 
         # edit style
         geo.create_outline_featurestyle(sty_name, 
@@ -182,7 +180,5 @@ def publish_shp_geo_data(instance):
         
         print("shp:\n\tpublished style {} for shp layer {}".format(sty_name, instance_name))
 
-        # tested: style is published
-
         # workspace si riferisce a geoserver-rest
-        #  schema si rieferisce a pgadmin
+        # schema si rieferisce a pgadmin
