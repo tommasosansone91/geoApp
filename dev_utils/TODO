@@ -11,3 +11,7 @@ implementa un logger
 # these elements should be each turned into a model.
 # the model should be filled with default elements at mingrations
 # the form to insert new geodata should indicate allow to insert new geoserver rest elements or select from dropdown menu.
+
+
+    # check that the instance exists in the database
+    # check that the instance exists in geoserver
