@@ -127,3 +127,7 @@ class AdminTestCase(TestCase):
                 uploaded_date=self.test_uploaded_date
                 ).exists()
             )
+        
+
+    # check that the instance exists in the database
+    # check that the instance exists in geoserver
