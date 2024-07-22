@@ -3,6 +3,7 @@
 import geopandas as gpd
 
 import os
+import shutil
 import zipfile
 
 import glob
@@ -119,12 +120,9 @@ def publish_shp_geo_data(instance):
 
             print("Instance {} was sent to_postgis!".format(instance_name))
 
-            for s in shp_files_list:
-                os.remove(s)
-
         except Exception as e:
-            for s in shp_files_list:
-                os.remove(s)
+
+            # shutil.rmtree(instance.shp_file_folder_path)  # deleted by delete customized method
 
             instance.delete()
             print("There was a problem during shp upload: ", e)
