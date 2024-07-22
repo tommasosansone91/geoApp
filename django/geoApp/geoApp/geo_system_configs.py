@@ -34,6 +34,10 @@ GEOSERVER_URL = "http://localhost:8080/geoserver/web"
 # define proper elelments of geoserver
 #----------------------------------------------
 
+# these elements should be each turned into a model.
+# the model should be filled with default elements at mingrations
+# the form to insert new geodata should indicate allow to insert new geoserver rest elements or select from dropdown menu.
+
 # the workspace is created once by user in geoserver UI
 wksp_name = 'my_workspace'
 

@@ -1,7 +1,13 @@
 
 
-far funzionare la pubblicazione dei dati
-
 trovare un modo di hardcodare il ercorso in upload to
 
 implementa un logger
+
+
+# define proper elelments of geoserver
+#----------------------------------------------
+
+# these elements should be each turned into a model.
+# the model should be filled with default elements at mingrations
+# the form to insert new geodata should indicate allow to insert new geoserver rest elements or select from dropdown menu.
