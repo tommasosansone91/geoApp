@@ -35,16 +35,16 @@ GEOSERVER_URL = "http://localhost:8080/geoserver/web"
 #----------------------------------------------
 
 # the workspace is created once by user in geoserver UI
-wksp_name = 'geoapp'
+wksp_name = 'my_workspace'
 
 # store_name
-ste_name = 'geoApp'
+ste_name = 'my_store_name'
 
 # schema name
 schm_name = 'data'
 
 # style name
-sty_name = 'geoApp_shp_style' 
+sty_name = 'my_style' 
 
 
 # variables validation
