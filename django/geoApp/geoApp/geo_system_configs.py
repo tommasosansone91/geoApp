@@ -3,6 +3,12 @@ from geoApp.settings import DATABASES
 
 from osgeo import gdal
 
+from geoApp.utils import \
+                        has_non_alphanumeric_characters, \
+                        has_uppercase_characters
+
+from django.core.exceptions import ValidationError
+
 # handle gdal exceptions
 #----------------------------------------
 
@@ -26,7 +32,7 @@ geoapp_db_params = {
         'port':     DATABASES['default']['PORT'],
         'dbname':   DATABASES['default']['NAME'],    
 }
-# psql -d geoapp -U postgres -h localhost
+# psql -d geoappdb -U geoapp_main -h localhost
 
 GEOSERVER_URL = "http://localhost:8080/geoserver/web"
 
@@ -39,10 +45,10 @@ GEOSERVER_URL = "http://localhost:8080/geoserver/web"
 # the form to insert new geodata should indicate allow to insert new geoserver rest elements or select from dropdown menu.
 
 # the workspace is created once by user in geoserver UI
-wksp_name = 'my_workspace'
+wksp_name = 'geoapp'
 
 # store_name
-ste_name = 'my_store_name'
+ste_name = 'geoapp'
 
 # schema name
 schm_name = 'data'
@@ -53,3 +59,25 @@ sty_name = 'my_style'
 
 # variables validation
 #-----------------------
+
+geoserver_elements =  {
+    
+    "workspace_name": wksp_name,
+    "schema_name": schm_name, 
+    "store_name": ste_name,
+    "style_name": sty_name,
+}
+
+for element in geoserver_elements:
+
+    geoserver_element_is_valid = True
+
+    if has_uppercase_characters(geoserver_elements[element]):
+        geoserver_element_is_valid = False
+
+    if has_non_alphanumeric_characters(geoserver_elements[element]):
+        geoserver_element_is_valid = False
+
+
+    if not geoserver_element_is_valid:
+        raise ValidationError("Validation failed for geoserver element {}. Its value is '{}'. It is not valid.".format(element, geoserver_elements[element]))
