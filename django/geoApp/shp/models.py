@@ -37,7 +37,9 @@ from geoApp.exceptions import GeoserverNotAvailableError
 
 from geoApp.geo_system_check import check_geoserver_status
 
-from geoApp.utils import has_non_alphanumeric_characters
+from geoApp.utils import \
+                        has_non_alphanumeric_characters, \
+                        has_uppercase_characters
 
 
 
@@ -81,8 +83,8 @@ class Shp(models.Model):
                 pass
 
         # print("File validation: field 'name' must contain only alphanumerical or underscore characters.")
-        if has_non_alphanumeric_characters(self.name):
-            raise ValidationError("The field 'name' must contain only alphanumerical or underscore characters.")
+        if has_non_alphanumeric_characters(self.name) or has_uppercase_characters(self.name):
+            raise ValidationError("The field 'name' must contain only lowercase alphanumerical or underscore characters.")
         else:
             # print("> File name validation passed!")
             pass
