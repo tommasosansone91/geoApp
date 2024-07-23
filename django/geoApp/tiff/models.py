@@ -27,7 +27,9 @@ from tiff.process_tiff import publish_tiff_geo_data
 from geoApp.geo_system_check import check_geoserver_status
 from geoApp.exceptions import GeoserverNotAvailableError
 
-from geoApp.utils import has_non_alphanumeric_characters
+from geoApp.utils import \
+                        has_non_alphanumeric_characters, \
+                        has_uppercase_characters
 
 
 # ensure geoserver is active, otherwise, do not allow the app to start
@@ -66,8 +68,8 @@ class Tiff(models.Model):
             pass
 
         # print("File validation: field 'name' must contain only alphanumerical or underscore characters.")
-        if has_non_alphanumeric_characters(self.name):
-            raise ValidationError("The field 'name' must contain only alphanumerical or underscore characters.")
+        if has_non_alphanumeric_characters(self.name) or has_uppercase_characters(self.name):
+            raise ValidationError("The field 'name' must contain only lowercase alphanumerical or underscore characters.")
         else:
             # print("> File name validation passed!")
             pass

@@ -15,3 +15,7 @@ def has_non_alphanumeric_characters(stringa):
     match_obj = pattern_obj.search(stringa)
     non_alphanumeric_characters_are_found = bool(match_obj)
     return non_alphanumeric_characters_are_found 
+
+def has_uppercase_characters(stringa):
+    uppercase_characters_are_found = False if stringa.lower() == stringa else True
+    return uppercase_characters_are_found
