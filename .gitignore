@@ -9,7 +9,7 @@ django/geoApp/*/__pycache__/*
 django/geoApp/*/migrations/__pycache__/*
 
 # these can be collected via collectstatic
-django/geoApp/static
+django/geoApp/staticfiles
 
 # these are the uploaded files - old dir
 # django/geoApp/uploaded_files
