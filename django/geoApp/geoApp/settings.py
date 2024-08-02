@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware', #zips up static files
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -152,6 +153,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 #  li mettero nella cartella static
 STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'geoApp/static') ]
 # where I put my static files
+
+# this is my add
+STATICSTORAGE = "Whitenoise.storage.CompressedManifestStaticFilesStorage" #zips up static files
 
 # my adds
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
