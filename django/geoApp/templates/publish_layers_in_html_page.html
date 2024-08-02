@@ -1,5 +1,11 @@
 
-//Shapefile wms
+ <!-- this is a html file containing jinja2 code -->
+
+ <script> 
+ 
+var overlayMaps = {};
+
+// Shapefile wms
 {% for s in shp %}
 var {{ s.name }} = L.tileLayer.wms('http://localhost:8080/geoserver/wms', {
     layers: '{{s.name}}',
@@ -22,3 +28,6 @@ overlayMaps['{{ t.name }}'] = {{ t.name }}
 
 {% endfor %}
 
+L.control.layers(baseMaps, overlayMaps, {collapsed: false, position: 'topleft'}).addTo(map)
+
+</script>

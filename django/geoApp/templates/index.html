@@ -36,9 +36,6 @@
     <!-- these are at the bottom of the loading sources lines since they requires the ones above -->
     <link rel="stylesheet" href="{% static './dist/style.css' %}"/>
 
-    <!-- loading the js to load tiff files into the home page map -->
-    <script src="{% static './auxiliary/index.js' %}" defer></script>
-
 
 </head>
 
@@ -167,3 +164,34 @@
 
 <!-- the code that was here was moved to main js in order to collect into one place all the js -->
 
+<!-- jinja-javascript snippet to load tiff files into the home page map -->
+<script> 
+ 
+  var overlayMaps = {};
+  
+  // Shapefile wms
+  {% for s in shp %}
+  var {{ s.name }} = L.tileLayer.wms('http://localhost:8080/geoserver/wms', {
+      layers: '{{s.name}}',
+      transparent: true,
+      format: 'image/png',
+  })
+  overlayMaps['{{ s.name }}'] = {{ s.name }}
+  
+  {% endfor %}
+  
+  //Tiff wms
+  {% for t in tiff %}
+  var {{ t.name }} = L.tileLayer.wms('http://localhost:8080/geoserver/wms', {
+      layers: '{{t.name}}',
+      transparent: true,
+      format: 'image/png',
+  })
+  
+  overlayMaps['{{ t.name }}'] = {{ t.name }}
+  
+  {% endfor %}
+  
+  L.control.layers(baseMaps, overlayMaps, {collapsed: false, position: 'topleft'}).addTo(map)
+  
+  </script>
