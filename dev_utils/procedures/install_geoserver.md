@@ -2,7 +2,7 @@
 
 ## install java 11
 
->[!NOTE] 
+>[!IMPORTANT] 
 > doc of geoserver (not the rest one!) says only java 17 or 11 will work.
 
     sudo apt update
