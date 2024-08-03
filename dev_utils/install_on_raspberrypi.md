@@ -5,6 +5,7 @@ This procedure gives instructions on how to install the app geoApp on a Raspberr
 > [!IMPORTANT]
 > The Raspberry pi and the PC used for the deploy must be connected to the same LAN network.
 
+
 ## Key exchange between RPi and github
 
 from your PC log into the RPi.
@@ -84,10 +85,12 @@ become admin
 
     sudo su
 
+
 ### Install git
 
     sudo apt update
     sudo apt install git
+
 
 ### clone the app
 
@@ -146,6 +149,7 @@ Check the port on which postgres is listening
 
     sudo netstat -lntp | grep postgres
 
+
 ### Reset root default password
 
 Useful information for Ubuntu: https://askubuntu.com/a/1466769/1342430
@@ -178,6 +182,7 @@ commit the change by exiting the shell
 
     exit
 
+
 ### Create a new database for the app
 
 enter the postgres shell as `postgres` user
@@ -197,6 +202,9 @@ create a "main" and a "readonly" user for the app
 make the main user the owner of the database
 
     alter database geoappdb OWNER TO geoapp_main;
+
+
+#### Test the database connection
 
 exit the shell and test to reopen it as the "main user of the app"
 
@@ -224,6 +232,85 @@ These credentials must be inserted in the `DATABASES` variable in `settings.py` 
             'PORT': '5432',
         }
     }
+
+
+#### Install postgis extension inside the geoappdb database
+
+    sudo -i -u postgres
+
+    psql -d geoappdb
+
+    CREATE EXTENSION postgis;
+
+    exit
+
+
+#### create a new schema inside the geoappdb database
+
+    psql -h localhost -U geoapp_main -d geoappdb
+
+    create schema data;
+
+    exit
+
+
+## install geoserver
+
+This app requires the software geoserver to be installed and running.
+
+geoserver requires java to be installed.
+
+
+### install java 11
+
+>[!IMPORTANT] 
+> doc of geoserver (not the rest one!) says only java 17 or 11 will work.
+
+    sudo apt update
+    sudo apt install openjdk-11-jdk
+
+
+### install geoserver 
+
+following the documentation https://docs.geoserver.org/latest/en/user/installation/linux.html
+
+linux: select web archive from https://geoserver.org/release/stable/
+
+downloaded<br>
+and saved into new path<br>
+
+    cd /usr/share/
+    sudo mkdir geoserver
+
+    cp ..../geoserver-2.22.0-bin.zip  /usr/share/geoserver/
+
+---> /usr/share/geoserver/geoserver-2.22.0-bin.zip
+
+unzip via UI
+
+    cd /usr/share/geoserver/
+    xdg-open .
+
+e.g. /usr/share/geoserver/lib/
+
+run 
+
+    echo "export GEOSERVER_HOME=/usr/share/geoserver" >> ~/.profile
+    . ~/.profile
+
+    sudo chown -R $USER /usr/share/geoserver/
+
+e.g.
+
+    sudo chown -R tommaso /usr/share/geoserver/
+
+
+### test geoserver
+
+    cd /usr/share/geoserver/bin/ && sh startup.sh 
+
+wait some seconds, then, in a web browser, navigate to http://localhost:8080/geoserver
+
 
 ## Install Python
 
@@ -265,7 +352,8 @@ ativate and deactivate the virtual environment only for testing
     source venv/bin/activate
     deactivate
 
-## Install the python modules web framework django
+
+## Install the python modules
 
     sudo su
     cd /var/www/geoApp
@@ -275,6 +363,23 @@ ativate and deactivate the virtual environment only for testing
 > Make sure you have already installed postgresql, or the installation of python module `psycopg2` will raise problems and confliects.
 
     sudo apt update
+
+
+### Safe install of GDAL
+
+safe install `GDAL` before massively installing all the other python modules.
+
+GDAL can be installed as python module only if it was before installed "at OS-level" (via `apt`).
+
+    sudo apt install libgdal-dev
+
+Install GDAL as python module
+
+    pip install GDAL==$(gdal-config --version | awk -F'[.]' '{print $1"."$2}')
+
+>[!IMPORTANT]
+> the python library of GDAL must have version corresponding to the GDAL installed via apt.
+
 
 ### Safe install of psycopg2
 
@@ -288,11 +393,23 @@ safe install `psycopg2` before massively installing all the other python modules
 
 Once `psycopg2` is installed, launch the massive safe installation of required python modules
 
+
+### Massive install of python modules in requirements.txt
+
     cat requirements.txt | xargs -n 1 pip install
 
 for every package which raises problems, open the file `requirements.txt`, look up for the line including that module and remove the string `==X.X.X`, then run again the same command
 
     cat requirements.txt | xargs -n 1 pip install
+
+
+### Safely reinstall GDAL correct version
+
+    pip install GDAL==$(gdal-config --version | awk -F'[.]' '{print $1"."$2}')
+
+>[!TIP]
+> the python library of GDAL must have version corresponding to the GDAL installed via apt.
+
 
 ## Create the app tables in postgresql via python
 
@@ -306,6 +423,7 @@ Once the app framework and postgres are both installed, create the tables requir
 
     python manage.py migrate
 
+
 ## Create superuser
 
 Create superuser in order to access the admin section of the app.
@@ -315,6 +433,7 @@ Create superuser in order to access the admin section of the app.
     source venv/bin/activate
 
     python manage.py createsuperuser
+
 
 ## Collect static files
 
@@ -334,6 +453,7 @@ This can be done by running the django command `collectstatic`.
     source venv/bin/activate
 
     python manage.py collectstatic   
+
 
 ## Configure the app to be hosted on the RPi
 
@@ -385,6 +505,7 @@ you should see
 
 
 This allows Nginx to find the app-specific configuration file `infrastructure/nginx/geoApp_nginx.conf` when it searches for configuration files.
+
 
 ### Check that Nginx is working
 
