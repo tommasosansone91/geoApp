@@ -1,5 +1,7 @@
 # run apps manually
 
+This is to run the app on the development machine.
+
 ## django
 
     # start geoserver
