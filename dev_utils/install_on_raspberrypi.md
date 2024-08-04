@@ -120,7 +120,6 @@ This is the *web server* (server the static files) and *reverse proxy* (forwards
 
     sudo su
     cd /var/www/geoApp
-    source venv/bin/activate
 
     apt-get update
     apt-get install nginx
@@ -365,20 +364,14 @@ ativate and deactivate the virtual environment only for testing
     sudo apt update
 
 
-### Safe install of GDAL
+### Install of libgdal-dev to allow GDAL install
 
-safe install `GDAL` before massively installing all the other python modules.
-
-GDAL can be installed as python module only if it was before installed "at OS-level" (via `apt`).
+GDAL, <u>which is listed in requirements.txt</u>, can be installed as python module only if it was before installed "at OS-level" (via `apt`).
 
     sudo apt install libgdal-dev
 
-Install GDAL as python module
-
-    pip install GDAL==$(gdal-config --version | awk -F'[.]' '{print $1"."$2}')
-
->[!IMPORTANT]
-> the python library of GDAL must have version corresponding to the GDAL installed via apt.
+However, the python library `GDAL` must have version corresponding to the GDAL installed via apt.<br>
+So we will have to reinstall python module GDAL after all the others module have been installed.
 
 
 ### Safe install of psycopg2
@@ -405,10 +398,14 @@ for every package which raises problems, open the file `requirements.txt`, look 
 
 ### Safely reinstall GDAL correct version
 
+Install GDAL as python module
+
     pip install GDAL==$(gdal-config --version | awk -F'[.]' '{print $1"."$2}')
 
->[!TIP]
-> the python library of GDAL must have version corresponding to the GDAL installed via apt.
+>[!NOTE]
+> the python library `GDAL` must have version corresponding to the GDAL installed via apt.<br>
+> So, we want to re-install python module `GDAL` after having installed `libpq-dev` and all the other python modules,<br>
+> because a new version of `libpq-dev` results in installing a new version of python module `GDAL`.
 
 
 ## Create the app tables in postgresql via python
