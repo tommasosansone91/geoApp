@@ -6,9 +6,11 @@ The upload can be done via the django-admin UI page.
 
 The tiff file is directly loaded into geoserver, while the shp file is also loaded into postgres as table having name equal to the name specified in the upload UI panel.
 
+
 ## requirements
 
 This app requires java 11 or 17, geoserver, postgres and postgis extension for postgres.
+
 
 ## original source of the code
 
@@ -32,3 +34,8 @@ This app requires java 11 or 17, geoserver, postgres and postgis extension for p
     geoApp
     shp
     tiff
+
+
+## Installation guide
+
+https://github.com/tommasosansone91/geoApp/blob/master/dev_utils/install_on_raspberrypi.md
