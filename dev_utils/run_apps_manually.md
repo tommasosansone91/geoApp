@@ -6,19 +6,19 @@ This is to run the app on the development machine.
 
     # start geoserver
 
-    cd ~/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango
+    cd ~/tommaso03/coding_projects/corsi_udemy/geoApp
     bash dev_utils/geoserver_commands/start_and_open_geoserver.sh
 
 
     # activate virtual environments
 
     deactivate
-    cd ~/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango
-    source django/venv/bin/activate
+    cd ~/tommaso03/coding_projects/corsi_udemy/geoApp
+    source /venv/bin/activate
 
     # run app
 
-    cd django/geoApp
+    cd /geoApp
     python manage.py runserver
 
 
@@ -33,7 +33,7 @@ This is to run the app on the development machine.
 
     deactivate
 
-    cd ~/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango
+    cd ~/tommaso03/coding_projects/corsi_udemy/geoApp
 
     source geoserver-rest/venv/bin/activate
 

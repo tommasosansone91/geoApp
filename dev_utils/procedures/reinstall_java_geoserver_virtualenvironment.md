@@ -57,7 +57,7 @@ sudo apt install openjdk-11-jdk
 rifai il venv con i suoi componenti
 --------------------------------------
 
-cd /corsi_udemy/web-mapping-and-webgis-geodjango/geoserver-rest
+cd /corsi_udemy/geoApp/dev_utils/dev_lab/geoserver-rest
 
 virtualenv venv
 

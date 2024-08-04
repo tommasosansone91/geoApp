@@ -140,8 +140,8 @@ Salva le modifiche e prova a caricare nuovamente i file. Questa soluzione dovreb
 
 ### FutureWarning: Neither gdal.UseExceptions() nor gdal.DontUseExceptions() has been explicitly called. In GDAL 4.0, exceptions will be enabled by default.
 
-(venv) tommaso@tommaso-virtualbox02:~/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango/geoserver-rest$ python geoserver-rest.py
-/home/tommaso/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango/geoserver-rest/venv/lib/python3.10/site-packages/osgeo/gdal.py:312: FutureWarning: Neither gdal.UseExceptions() nor gdal.DontUseExceptions() has been explicitly called. In GDAL 4.0, exceptions will be enabled by default.
+(venv) tommaso@tommaso-virtualbox02:~/tommaso03/coding_projects/corsi_udemy/geoApp/dev_utils/dev_lab/geoserver-rest$ python geoserver-rest.py
+/home/tommaso/tommaso03/coding_projects/corsi_udemy/geoApp/dev_utils/dev_lab/geoserver-rest/venv/lib/python3.10/site-packages/osgeo/gdal.py:312: FutureWarning: Neither gdal.UseExceptions() nor gdal.DontUseExceptions() has been explicitly called. In GDAL 4.0, exceptions will be enabled by default.
   warnings.warn(
 
 pe4r risolvere chiama uno di questi

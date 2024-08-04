@@ -186,8 +186,8 @@ pip install django==3.1.14
 
 django-admin startproject geoApp
 
-/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango/django$ cd geoApp/
-(venv) tommaso@tommaso-VirtualBox02:~/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango/django/geoApp$ python manage.py runserver
+/tommaso03/coding_projects/corsi_udemy/geoApp$ cd geoApp/
+(venv) tommaso@tommaso-VirtualBox02:~/tommaso03/coding_projects/corsi_udemy/geoApp$ python manage.py runserver
 
 ora nota che djagno è esposto sulla porta 8000
 mentre leaflet sulla 5500
@@ -263,7 +263,7 @@ nuova dire geoserver-rest
 
 serve python 3
 
-tommaso@tommaso-VirtualBox02:~/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango/geoserver-rest$ python3 -m virtualenv venv
+tommaso@tommaso-VirtualBox02:~/tommaso03/coding_projects/corsi_udemy/geoApp/dev_utils/dev_lab/geoserver-rest$ python3 -m virtualenv venv
 
 installo le lib in un nuovo venv
 
@@ -287,7 +287,7 @@ in postgres
 create extension postgis;
 
 in
-(venv) /home/tommaso/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango/django/geoApp
+(venv) /home/tommaso/tommaso03/coding_projects/corsi_udemy/geoApp
 python manage.py migrate
 
 migrate crea le tbelle in postgres che gli ho connesso
@@ -314,7 +314,7 @@ Running migrations:
   Applying auth.0012_alter_user_first_name_max_length... OK
   Applying sessions.0001_initial... OK
 
-  (venv) tommaso@tommaso-VirtualBox02:~/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango/django/geoApp$ python manage.py createsuperuser
+  (venv) tommaso@tommaso-VirtualBox02:~/tommaso03/coding_projects/corsi_udemy/geoApp$ python manage.py createsuperuser
 Username (leave blank to use 'tommaso'): admin   
 Email address: admin@gmail.com
 Password: password
@@ -330,16 +330,14 @@ index html invece l ho messo in una cattella templates che è allo stesso livell
 quidi devo agigungere il django tag {% load static %} al top della pagina che linka i contenuti
 
 poi python manage. py collectstatic
-questo comando copia tutti i file messi dentro la cartell
-
-a static in cui ci sono stile, js, ecc
+questo comando copia tutti i file messi dentro la cartela geoApp/static in cui ci sono stile, js, ecc
 dentro la staticfiles dir definita dal sistema settings di geoApp.
 
 STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'geoApp/static') ]
 
-144 static files copied to '/home/tommaso/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango/django/geoApp/static'.
+144 static files copied to '/home/tommaso/tommaso03/coding_projects/corsi_udemy/geoApp/staticfiles'.
 
-ora tutti  i link a una risorsa dentro static opossono essere linkati usando il tag static di django
+ora tutti  i link a una risorsa dentro staticfiles opossono essere linkati usando il tag static di django
 
 
 --------------- lezione 30 ---------------------

@@ -1,8 +1,8 @@
 import subprocess
 
 """
-cd django/geoApp
-source ../venv/bin/activate
+cd /geoApp
+source venv/bin/activate
 python manage.py runserver
 """
 
@@ -12,7 +12,7 @@ activate virtual environment if its name is venv and it is located in the parent
 
 subprocess.run('pwd')
 subprocess.run('ls ..')
-# subprocess.run('source ../venv/bin/activate')
+# subprocess.run('source venv/bin/activate')
 
 """
 
@@ -22,6 +22,6 @@ Puoi risolvere questo problema fornendo il percorso completo della directory che
 
 Ad esempio, invece di subprocess.run('ls ..'), puoi provare subprocess.run('ls /path/to/parent/directory'), sostituendo "/path/to/parent/directory" con il percorso completo della directory genitore.
 
-Inoltre, il comando source ../venv/bin/activate non può essere eseguito tramite subprocess.run in questo modo, perché l'attivazione dell'ambiente virtuale richiede di modificare la shell corrente e questo non è possibile tramite subprocess.run. Devi invece attivare manualmente l'ambiente virtuale prima di eseguire lo script, eseguendo il comando source ../venv/bin/activate nella shell corrente.
+Inoltre, il comando source venv/bin/activate non può essere eseguito tramite subprocess.run in questo modo, perché l'attivazione dell'ambiente virtuale richiede di modificare la shell corrente e questo non è possibile tramite subprocess.run. Devi invece attivare manualmente l'ambiente virtuale prima di eseguire lo script, eseguendo il comando source venv/bin/activate nella shell corrente.
 
 """
