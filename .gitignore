@@ -11,3 +11,6 @@ staticfiles
 
 # these are the uploaded files - new dir
 media
+
+# exclude the virtual environment
+venv
