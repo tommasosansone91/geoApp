@@ -1,3 +1,0 @@
-path dove è stato inzializzato git: 
-
-/home/tommaso/tommaso03/coding_projects/corsi_udemy/web-mapping-and-webgis-geodjango

@@ -1,17 +1,13 @@
 # this is the source code for this app, already built by the teacher
-source-code--geodjango-from-dev-to-deployment/
-source-code--geodjango-from-dev-to-deployment.zip
+dev_utils/dev_lab/source-code--geodjango-from-dev-to-deployment
+dev_utils/dev_lab/source-code--geodjango-from-dev-to-deployment.zip
 
-django/geoApp/2023/
+*/__pycache__/*
 
-django/geoApp/*/__pycache__/*
-
-django/geoApp/*/migrations/__pycache__/*
+*/migrations/__pycache__/*
 
 # these can be collected via collectstatic
-django/geoApp/staticfiles
+staticfiles
 
-# these are the uploaded files - old dir
-# django/geoApp/uploaded_files
 # these are the uploaded files - new dir
-django/geoApp/media
+media
