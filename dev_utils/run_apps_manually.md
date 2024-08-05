@@ -18,7 +18,6 @@ This is to run the app on the development machine.
 
     # run app
 
-    cd /geoApp
     python manage.py runserver
 
 
