@@ -70,7 +70,7 @@ reinstall geoserver from documentation
 ----------------------------------------
 https://docs.geoserver.org/latest/en/user/installation/linux.html
 
-linux: select web archive from https://geoserver.org/release/stable/
+linux: select Platform Independent Binary from https://geoserver.org/release/stable/
 
 downloaded
 and saved into new path
