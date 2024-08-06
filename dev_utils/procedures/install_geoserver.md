@@ -1,5 +1,8 @@
 # install geoserver
 
+This guide explains how to install geoserver on the development machine.
+
+
 ## install java 11
 
 >[!IMPORTANT] 
@@ -8,11 +11,15 @@
     sudo apt update
     sudo apt install openjdk-11-jdk
 
+
 ## install geoserver 
 
 following the documentation https://docs.geoserver.org/latest/en/user/installation/linux.html
 
-linux: select web archive from https://geoserver.org/release/stable/
+linux: select **"Platform Independent Binary"**
+
+Platform Independent Binary is the link having this description
+> Operating system independent runnable binary.
 
 downloaded<br>
 and saved into new path<br>
