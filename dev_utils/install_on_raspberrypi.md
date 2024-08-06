@@ -211,6 +211,8 @@ exit the shell and test to reopen it as the "main user of the app"
 
     psql -h localhost -U geoapp_main -d geoappdb
 
+    exit
+
 
 > [!IMPORTANT]
 > The database name, the database-owner user and its password become the credentials for the Django app to access the database.
@@ -271,44 +273,93 @@ geoserver requires java to be installed.
 
 ### install geoserver 
 
+On development machine
+
 following the documentation https://docs.geoserver.org/latest/en/user/installation/linux.html
 
-linux: select web archive from https://geoserver.org/release/stable/
+use the browser to go to page https://geoserver.org/release/stable/
 
-downloaded<br>
-and saved into new path<br>
+linux: select **"Platform Independent Binary"**
+
+Platform Independent Binary is the link having this description
+> Operating system independent runnable binary.
+
+e.g. `geoserver-2.22.0-bin.zip`
+
+download it via the browser (e.g. in `~/Downloads` )
+
+send it to the deploy machine
+
+    cd ~/Downloads
+    rsync --progress ~/Downloads/geoserver-2.22.0-bin.zip pi@<RPi_IP>:/tmp/
+
+    <RPi_user_pi_password>
+
+copy it into a new path
 
     cd /usr/share/
     sudo mkdir geoserver
 
-    cp ..../geoserver-2.22.0-bin.zip  /usr/share/geoserver/
+    sudo cp /tmp/geoserver-2.22.0-bin.zip  /usr/share/geoserver/
 
 ---> /usr/share/geoserver/geoserver-2.22.0-bin.zip
 
-unzip via UI
+unzip the archive via `unzip`
 
     cd /usr/share/geoserver/
-    xdg-open .
+    sudo unzip geoserver-2.22.0-bin.zip
 
-e.g. /usr/share/geoserver/lib/
+You should see directories like `/usr/share/geoserver/lib/`, `/usr/share/geoserver/license/`, ecc.
 
-run 
+exit superuser, return pi user
 
+    exit
+
+add the variable `GEOSERVER_HOME` to `~/.profile`
+
+    echo "" >> ~/.profile
     echo "export GEOSERVER_HOME=/usr/share/geoserver" >> ~/.profile
+
+reload `~/.profile`
+
     . ~/.profile
+
+> [!TIP]
+> this is the equivalent of `source ~/.profile`
+
+make the current user the owner of the folder `/usr/share/geoserver/`
 
     sudo chown -R $USER /usr/share/geoserver/
 
-e.g.
 
-    sudo chown -R tommaso /usr/share/geoserver/
-
-
-### test geoserver
+### verify that geoserver can be started up
 
     cd /usr/share/geoserver/bin/ && sh startup.sh 
 
-wait some seconds, then, in a web browser, navigate to http://localhost:8080/geoserver
+wait some seconds, then run
+
+#### curl test
+
+    curl http://localhost:8080/geoserver/web
+
+it should return nothing.<br>
+The test fails if the following line is returned
+
+    curl: (7) Failed to connect to localhost port 8080: Connection refused
+
+#### ps aux grep test
+
+    ps aux | grep geoserver
+
+it should return the following lines
+
+    pi        8258 38.8  7.8 1291348 313236 pts/0  Sl+  01:44   2:10 java -DNoJavaOpts -Xbootclasspath/a:/usr/share/geoserver/webapps/geoserver/WEB-INF/lib/marlin-0.9.3.jar -Dsun.java2d.renderer=org.marlin.pisces.MarlinRenderingEngine -Djetty.base=/usr/share/geoserver -DGEOSERVER_DATA_DIR=/usr/share/geoserver/data_dir -Djava.awt.headless=true -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -jar /usr/share/geoserver/start.jar
+
+    pi        8906  0.0  0.0   4780   504 pts/1    S+   01:50   0:00 grep --color=auto geoserver
+
+The test fails if only the following line is returned
+
+    pi        8930  0.0  0.0   4780   528 pts/1    S+   01:50   0:00 grep --color=auto geoserver
 
 
 ## Install Python
