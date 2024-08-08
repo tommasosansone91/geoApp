@@ -148,7 +148,9 @@ var geodataLayers = {
 }
 
 // L.control.layers(baseMaps, geodataLayers, ).addTo(map)
-L.control.layers(baseMaps, geodataLayers, {collapsed: false, position: 'topleft'}).addTo(map)
+
+// # this adds the markers to the map
+// L.control.layers(baseMaps, geodataLayers, {collapsed: false, position: 'topleft'}).addTo(map)
 
 // activate the marekrs by default y simply - then you can uncklick them from menu
 marker.addTo(map);
