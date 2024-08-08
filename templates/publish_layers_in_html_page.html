@@ -1,11 +1,6 @@
 
  <!-- this is a html file containing jinja2 code -->
 
- {% comment %}  this file is not used right now {% endcomment %}
-
- {% extends "index.html" %}
-
- {% block scripts %}
  <script> 
  
 var overlayMaps = {};
@@ -36,4 +31,3 @@ overlayMaps['{{ t.name }}'] = {{ t.name }}
 L.control.layers(baseMaps, overlayMaps, {collapsed: false, position: 'topleft'}).addTo(map)
 
 </script>
-{% endblock %}
