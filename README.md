@@ -7,6 +7,11 @@ The upload can be done via the django-admin UI page.
 The tiff file is directly loaded into geoserver, while the shp file is also loaded into postgres as table having name equal to the name specified in the upload UI panel.
 
 
+# source
+
+The app is based on [iamtekson](https://github.com/iamtekson "iamtekson")'s [geodjango-from-dev-to-deployment](https://github.com/iamtekson/geodjango-from-dev-to-deployment "geodjango-from-dev-to-deployment") project.
+
+
 ## requirements
 
 This app requires java 11 or 17, geoserver, postgres and postgis extension for postgres.
