@@ -14,12 +14,15 @@ This is to run the app on the development machine.
 
     deactivate
     cd ~/tommaso03/coding_projects/corsi_udemy/geoApp
-    source /venv/bin/activate
+    source venv/bin/activate
 
     # run app
 
-    cd /geoApp
     python manage.py runserver
+
+    # open app in browser 
+
+    xdg-open http://127.0.0.1:8000/
 
 
 ### Test the django app
