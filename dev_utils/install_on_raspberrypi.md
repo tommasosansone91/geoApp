@@ -449,7 +449,7 @@ for every package which raises problems, open the file `requirements.txt`, look 
 
 ### Safely reinstall GDAL correct version
 
-Install GDAL as python module
+Install coherent version of GDAL as python module
 
     pip install GDAL==$(gdal-config --version | awk -F'[.]' '{print $1"."$2}')
 
@@ -545,7 +545,7 @@ Create the symbolic link
 
 Check that the symbolic link is right, run 
 
-    ll /etc/nginx/conf.d
+    ll /etc/nginx/conf.d/geoApp_nginx.conf
 
 you should see
 
@@ -622,7 +622,7 @@ Create the symbolic link
 
 Check that the symbolic link is right, run 
 
-    ll /var/www/geoApp/
+    ll /var/www/geoApp/geoApp.wsgi
 
 you should see the symbolic link and check that it is not colored in red
 
