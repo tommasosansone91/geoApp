@@ -17,6 +17,7 @@ GeoAlchemy2==0.13.1
 geopandas==0.12.2
 geoserver-rest==2.3.4
 greenlet==2.0.2
+gunicorn==20.0.4
 idna==3.4
 kiwisolver==1.4.4
 matplotlib==3.6.3
