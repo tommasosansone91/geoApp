@@ -4,14 +4,9 @@
 
 # sudo vim /etc/cron.d/geoApp-cron
 
-# salva i valori nel modello storico grezzo
-# arrangia le serie orarie attingendo al modello storico grezzo
-0 * * * * root bash /var/www/geoApp/infrastructure/sh/save_current_data_and_arrange_series_and_graphs.sh >/var/log/geoApp/save_current_data_and_arrange_series_and_graphs.log
-
 
 
 # tests
 # -------
 
 # * * * * * root cd /home/pi/;touch hello_time.txt;echo "hello the time is $(date)" >> hello_time.txt
-# * * * * * root bash /var/www/geoApp/infrastructure/sh/save_current_data_and_arrange_series_and_graphs.sh >/var/log/geoApp/save_current_data_and_arrange_series_and_graphs.log
