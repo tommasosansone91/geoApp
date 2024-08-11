@@ -145,7 +145,10 @@ you should see the Nginx welcome page.
 ### Install
 
     sudo apt-get update
-    sudo apt-get install postgresql
+
+    sudo apt install postgresql postgresql-contrib
+
+    sudo apt install postgis
 
 Check the port on which postgres is listening
 
@@ -167,6 +170,10 @@ Become user `postgres`
 open the postgres shell
 
     psql
+
+check the installed version of postgres
+
+     select version();
 
 reset the root password
 
@@ -246,6 +253,10 @@ These credentials must be inserted in the `DATABASES` variable in `settings.py` 
 
     CREATE EXTENSION postgis;
 
+check the installed version
+
+    SELECT PostGIS_full_version();
+
     exit
 
 
@@ -262,12 +273,15 @@ These credentials must be inserted in the `DATABASES` variable in `settings.py` 
 
 This app requires the software geoserver to be installed and running.
 
+> [!IMPORTANT]
+> Whenever a django command involving this app is launched, geoserver must be up and running, or the command will fail.
+
 geoserver requires java to be installed.
 
 
 ### install java 11
 
->[!IMPORTANT] 
+>[!WARNING] 
 > doc of geoserver (not the rest one!) says only java 17 or 11 will work.
 
     sudo apt update
@@ -398,7 +412,13 @@ The test fails if only the following line is returned
 
 specifically use python3 to create a virtual environment for the app in folder `venv`
 
+for python <= 3.11
+
     /usr/local/opt/python-3.8.1/bin/python3.8 -m venv ./venv/
+
+for python >= 3.12
+
+    virtualenv venv
 
 ativate and deactivate the virtual environment only for testing
 
