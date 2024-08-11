@@ -2,6 +2,9 @@
 
 This procedure gives instructions on how to install the app geoApp on a Raspberry pi.
 
+> [!WARNING]
+> The Raspberry pi OS must be Ubuntu 22.04.
+
 > [!IMPORTANT]
 > The Raspberry pi and the PC used for the deploy must be connected to the same LAN network.
 
