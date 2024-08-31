@@ -379,6 +379,15 @@ The test fails if only the following line is returned
     pi        8930  0.0  0.0   4780   528 pts/1    S+   01:50   0:00 grep --color=auto geoserver
 
 
+### UI test
+
+from another machine of the same LAN to which is connected the deploy machine, open in the browser the following address 
+
+    http://<RPi_IP>:8080/geoserver 
+
+You should see geoserver interface
+
+
 ## Install Python
 
     sudo add-apt-repository ppa:deadsnakes/ppa
@@ -463,19 +472,12 @@ Once `psycopg2` is installed, launch the massive safe installation of required p
 
 ### Safe install of modules made by the author
 
-safe install modules made by the author before massively installing all the other python modules
+Safe install modules made by the author before massively installing all the other python modules.
+
+The module `postgres-helper` made by the author requires `pymongo` to be installed.
 
     pip install pymongo
     pip install postgres-helper
-    
-the module `postgres-helper` made by the author requires `pymongo` to be installed.
-
-Also a manual install of the following packages can help:
-
-    pip install pandas
-    pip install gdal
-    pip install numpy
-    pip install greenlet
 
 
 ### Massive install of python modules in requirements.txt
@@ -485,6 +487,23 @@ Also a manual install of the following packages can help:
 for every package which raises problems, open the file `requirements.txt`, look up for the line including that module and remove the string `==X.X.X`, then run again the same command
 
     cat requirements.txt | xargs -n 1 pip install
+
+
+#### Manual install of main data-reated modules which causes troubles to geodata-related modules
+
+It seems there are problems when trying to install in order all the modules in `requirements.txt`, which requires the packages `pandas`, `gdal`, `numpy`, `greenlet` to be installed.
+
+In case you are running into some errors with the massive installation of all the modules, a manual install of the following packages should solve the problem.
+
+> [!WARNING]
+> Try to do the massive installation of all the modules before running the following commands.
+
+    pip install pandas==1.5.3
+    pip install GDAL==3.6.0
+    pip install numpy==1.24.2
+    pip install greenlet==2.0.2
+
+Then you have to install all the other modules, except `pandas`, `gdal`, `numpy`, `greenlet` (they are listed in requirements_residuals.txt).
 
 
 ### Safely reinstall GDAL correct version
