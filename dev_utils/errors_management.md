@@ -272,4 +272,15 @@ error: subprocess-exited-with-error
 pandas takes forever
 
 
+### AttributeError: module 'pkgutil' has no attribute 'ImpImporter'. Did you mean: 'zipimporter'?
+
+python 12 is not compatible with numpy==1.24.4 
+
+you need to upgrade it to numpy==1.26.4
+
+
+
+  pip install numpy==1.26.4
+
+
 
