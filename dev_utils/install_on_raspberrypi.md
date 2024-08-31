@@ -461,6 +461,23 @@ safe install `psycopg2` before massively installing all the other python modules
 Once `psycopg2` is installed, launch the massive safe installation of required python modules
 
 
+### Safe install of modules made by the author
+
+safe install modules made by the author before massively installing all the other python modules
+
+    pip install pymongo
+    pip install postgres-helper
+    
+the module `postgres-helper` made by the author requires `pymongo` to be installed.
+
+Also a manual install of the following packages can help:
+
+    pip install pandas
+    pip install gdal
+    pip install numpy
+    pip install greenlet
+
+
 ### Massive install of python modules in requirements.txt
 
     cat requirements.txt | xargs -n 1 pip install
@@ -812,8 +829,9 @@ http://192.168.1.106:3006/
 
 In case you want to disable the program on boot
 
-    sudo systemctl daemon-reload
     sudo systemctl disable geoApp.service
+    sudo systemctl daemon-reload
+
 
 Documentation https://www.freedesktop.org/software/systemd/man/systemd.service.html
 
