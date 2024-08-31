@@ -41,7 +41,7 @@ After=network.target
 
 [Service]
 WorkingDirectory=/var/www/geoApp/
-ExecStart=/var/www/geoApp/venv/bin/gunicorn geoApp.wsgi:application --bind localhost:8001
+ExecStart=/var/www/geoApp/venv/bin/gunicorn geoApp.wsgi:application --bind localhost:8006
 
 StandardOutput=file:/var/log/geoApp/geoApp-stdout.log
 StandardError=file:/var/log/geoApp/geoApp-stderr.log
